@@ -1,0 +1,42 @@
+PARSER_BEGIN(analizador)
+
+public class analizador {
+    public static void main(String[] args) {
+	try {
+	    analizador parser = new analizador(System.in);
+	    parser.Input();
+	} catch (ParseException e) {
+	    System.out.println(e.getMessage());
+	}
+    }
+}
+
+PARSER_END(analizador)
+
+SKIP :
+{
+    " " |
+    "\t" |
+    "\n" |
+    "\r" 
+}
+
+TOKEN : {
+    <PLUS : "+">
+}
+
+TOKEN : {
+    <NUMBER : (["0"-"9"])+>
+}
+
+void Input() :
+{
+}
+{
+    <NUMBER>
+    (
+        <PLUS>
+        <NUMBER>
+    )*
+    <EOF> 
+}
