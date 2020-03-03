@@ -5,7 +5,7 @@ public class analizador implements analizadorConstants {
         try {
             analizador parser = new analizador(System.in);
             parser.Input();
-        System.out.println("El analizador ha terminado");
+        System.out.println("El analizador ha terminado sin errores");
         } catch (ParseException e) {
             System.out.println(e.getMessage());
         System.out.println("Se han encontrado errores");
@@ -13,21 +13,7 @@ public class analizador implements analizadorConstants {
     }
 
   static final public void Input() throws ParseException {
-    jj_consume_token(NUMBER);
-    label_1:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case PLUS:{
-        ;
-        break;
-        }
-      default:
-        jj_la1[0] = jj_gen;
-        break label_1;
-      }
-      jj_consume_token(PLUS);
-      jj_consume_token(NUMBER);
-    }
+    jj_consume_token(IDENTIFIER);
     jj_consume_token(0);
 }
 
@@ -41,13 +27,13 @@ public class analizador implements analizadorConstants {
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[1];
+  static final private int[] jj_la1 = new int[0];
   static private int[] jj_la1_0;
   static {
 	   jj_la1_init_0();
 	}
 	private static void jj_la1_init_0() {
-	   jj_la1_0 = new int[] {0x20,};
+	   jj_la1_0 = new int[] {};
 	}
 
   /** Constructor with InputStream. */
@@ -68,7 +54,6 @@ public class analizador implements analizadorConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 1; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -82,7 +67,7 @@ public class analizador implements analizadorConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 1; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 0; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -99,7 +84,6 @@ public class analizador implements analizadorConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 1; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -117,7 +101,6 @@ public class analizador implements analizadorConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 1; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -133,7 +116,6 @@ public class analizador implements analizadorConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 1; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -142,7 +124,6 @@ public class analizador implements analizadorConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 1; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -193,12 +174,12 @@ public class analizador implements analizadorConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
 	 jj_expentries.clear();
-	 boolean[] la1tokens = new boolean[7];
+	 boolean[] la1tokens = new boolean[13];
 	 if (jj_kind >= 0) {
 	   la1tokens[jj_kind] = true;
 	   jj_kind = -1;
 	 }
-	 for (int i = 0; i < 1; i++) {
+	 for (int i = 0; i < 0; i++) {
 	   if (jj_la1[i] == jj_gen) {
 		 for (int j = 0; j < 32; j++) {
 		   if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -207,7 +188,7 @@ public class analizador implements analizadorConstants {
 		 }
 	   }
 	 }
-	 for (int i = 0; i < 7; i++) {
+	 for (int i = 0; i < 13; i++) {
 	   if (la1tokens[i]) {
 		 jj_expentry = new int[1];
 		 jj_expentry[0] = i;

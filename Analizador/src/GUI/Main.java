@@ -6,7 +6,8 @@
 package GUI;
 
 import java.io.ByteArrayInputStream;
-
+import Comp.*;
+import Comp.analizador;
 /**
  *
  * @author reymi
@@ -141,7 +142,6 @@ public class Main extends javax.swing.JFrame {
         String TextAnalizar = this.Texto.getText();
         ByteArrayInputStream text = new ByteArrayInputStream(TextAnalizar.getBytes());
         analizador parser = new analizador(text);
-        System.out.println("je");
         try {
             parser.Input();
             this.Aviso.setText("Correcto je");

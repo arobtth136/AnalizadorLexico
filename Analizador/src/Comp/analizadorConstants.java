@@ -9,9 +9,21 @@ public interface analizadorConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int PLUS = 5;
+  int DIGITS = 5;
   /** RegularExpression Id. */
-  int NUMBER = 6;
+  int CHAR = 6;
+  /** RegularExpression Id. */
+  int IDENTIFIER = 7;
+  /** RegularExpression Id. */
+  int NUMBER = 8;
+  /** RegularExpression Id. */
+  int PLUS = 9;
+  /** RegularExpression Id. */
+  int MINUS = 10;
+  /** RegularExpression Id. */
+  int TIMES = 11;
+  /** RegularExpression Id. */
+  int DIVIDE = 12;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -23,8 +35,14 @@ public interface analizadorConstants {
     "\"\\t\"",
     "\"\\n\"",
     "\"\\r\"",
-    "\"+\"",
+    "<DIGITS>",
+    "<CHAR>",
+    "<IDENTIFIER>",
     "<NUMBER>",
+    "\"+\"",
+    "\"-\"",
+    "\"*\"",
+    "\"/\"",
   };
 
 }

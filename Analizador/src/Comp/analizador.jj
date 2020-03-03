@@ -5,7 +5,7 @@ public class analizador {
 	try {
 	    analizador parser = new analizador(System.in);
 	    parser.Input();
-        System.out.println("El analizador ha terminado");
+        System.out.println("El analizador ha terminado sin errores");
 	} catch (ParseException e) {
 	    System.out.println(e.getMessage());
         System.out.println("Se han encontrado errores");
@@ -24,21 +24,22 @@ SKIP :
 }
 
 TOKEN : {
-    <PLUS : "+">
+    <#DIGITS : (["0"-"9"])+>|
+    <#CHAR : (["a"-"z","A"-"Z"])+>|
+    <IDENTIFIER : <CHAR>(<DIGITS>|<CHAR>)*"!var">|
+    <NUMBER : <DIGITS>|<DIGITS>"."<DIGITS>|<DIGITS>"."|"."<DIGITS>>
 }
-
 TOKEN : {
-    <NUMBER : (["0"-"9"])+>
+    <PLUS : "+">|
+    <MINUS : "-">|
+    <TIMES : "*">|
+    <DIVIDE : "/">
 }
 
 void Input() :
 {
 }
 {
-    <NUMBER>
-    (
-        <PLUS>
-        <NUMBER>
-    )*
+    <IDENTIFIER>
     <EOF> 
 }
