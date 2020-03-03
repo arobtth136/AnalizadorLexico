@@ -27,7 +27,14 @@ TOKEN : {
     <#DIGITS : (["0"-"9"])+>|
     <#CHAR : (["a"-"z","A"-"Z"])+>|
     <IDENTIFIER : <CHAR>(<DIGITS>|<CHAR>)*"!var">|
-    <NUMBER : <DIGITS>|<DIGITS>"."<DIGITS>|<DIGITS>"."|"."<DIGITS>>
+    <NUMBER : <DIGITS>|<DIGITS>"."<DIGITS>|<DIGITS>"."|"."<DIGITS>>|
+    <ARRAY : <CHAR>(<DIGITS|<CHAR>)*"["<NUMBER>"]!array">
+}
+TOKEN : {
+    <LPAREN : "(">|
+    <RPAREN : ")">|
+    <LBRACKET : "[">|
+    <RBRACKET : "]">|
 }
 TOKEN : {
     <PLUS : "+">|
