@@ -22,31 +22,58 @@ SKIP :
     "\n" |
     "\r" 
 }
+TOKEN : {
+    <MAIN : "def Main">{System.out.println("Main -> " + image);}|
+}
 
+TOKEN : {
+    <INT : "int">|
+    <DECIMAL : "decimal">|
+    <STRING : "String">|
+    <BOOLEAN : "Bool">|
+    <ASIGNACION : "=">|
+    <AND : "and">|
+    <OR : "or">|
+    <NOT : "not">|
+    <EQ : "==">|
+    <COLON : ":">|
+    <BIG : ">">|
+    <BIGEQ : ">=">|
+    <LESS : "<">|
+    <LESSEQ : "<=">|
+    <DOUBLECOMMA: "\""> 
+}
 TOKEN : {
     <#DIGITS : (["0"-"9"])+>|
     <#CHAR : (["a"-"z","A"-"Z"])+>|
-    <IDENTIFIER : <CHAR>(<DIGITS>|<CHAR>)*"!var">|
-    <NUMBER : <DIGITS>|<DIGITS>"."<DIGITS>|<DIGITS>"."|"."<DIGITS>>|
-    <ARRAY : <CHAR>(<DIGITS|<CHAR>)*"["<NUMBER>"]!array">
+    <IDENTIFIER : <CHAR>(<DIGITS>|<CHAR>)*>|
+    <NUMBER : <DIGITS>|<DIGITS>"."<DIGITS>|<DIGITS>"."|"."<DIGITS>>
+    
 }
 TOKEN : {
     <LPAREN : "(">|
     <RPAREN : ")">|
     <LBRACKET : "[">|
     <RBRACKET : "]">|
+    <lBRACE : "{">|
+    <RBRACE : "}">
 }
 TOKEN : {
     <PLUS : "+">|
     <MINUS : "-">|
     <TIMES : "*">|
     <DIVIDE : "/">
+    <INCR : "++">
+    <DECR : "--">
 }
-
+//Sentencias
+TOKEN : {
+    <IF : "if">{System.out.println("if -> " + image)}
+}
 void Input() :
 {
 }
 {
-    <IDENTIFIER>
+    <MAIN>
     <EOF> 
 }

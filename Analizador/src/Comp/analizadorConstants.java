@@ -9,21 +9,59 @@ public interface analizadorConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int DIGITS = 5;
+  int MAIN = 5;
   /** RegularExpression Id. */
-  int CHAR = 6;
+  int IF = 6;
   /** RegularExpression Id. */
-  int IDENTIFIER = 7;
+  int INT = 7;
   /** RegularExpression Id. */
-  int NUMBER = 8;
+  int DECIMAL = 8;
   /** RegularExpression Id. */
-  int PLUS = 9;
+  int STRING = 9;
   /** RegularExpression Id. */
-  int MINUS = 10;
+  int BOOLEAN = 10;
   /** RegularExpression Id. */
-  int TIMES = 11;
+  int ASIGNACION = 11;
   /** RegularExpression Id. */
-  int DIVIDE = 12;
+  int AND = 12;
+  /** RegularExpression Id. */
+  int OR = 13;
+  /** RegularExpression Id. */
+  int NOT = 14;
+  /** RegularExpression Id. */
+  int COLON = 15;
+  /** RegularExpression Id. */
+  int BIG = 16;
+  /** RegularExpression Id. */
+  int LESS = 17;
+  /** RegularExpression Id. */
+  int DIGITS = 18;
+  /** RegularExpression Id. */
+  int CHAR = 19;
+  /** RegularExpression Id. */
+  int IDENTIFIER = 20;
+  /** RegularExpression Id. */
+  int NUMBER = 21;
+  /** RegularExpression Id. */
+  int LPAREN = 22;
+  /** RegularExpression Id. */
+  int RPAREN = 23;
+  /** RegularExpression Id. */
+  int LBRACKET = 24;
+  /** RegularExpression Id. */
+  int RBRACKET = 25;
+  /** RegularExpression Id. */
+  int lBRACE = 26;
+  /** RegularExpression Id. */
+  int RBRACE = 27;
+  /** RegularExpression Id. */
+  int PLUS = 28;
+  /** RegularExpression Id. */
+  int MINUS = 29;
+  /** RegularExpression Id. */
+  int TIMES = 30;
+  /** RegularExpression Id. */
+  int DIVIDE = 31;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -35,10 +73,29 @@ public interface analizadorConstants {
     "\"\\t\"",
     "\"\\n\"",
     "\"\\r\"",
+    "\"def Main\"",
+    "\"if\"",
+    "\"int\"",
+    "\"decimal\"",
+    "\"String\"",
+    "\"Bool\"",
+    "\"=\"",
+    "\"and\"",
+    "\"or\"",
+    "\"not\"",
+    "\":\"",
+    "\">\"",
+    "\"<\"",
     "<DIGITS>",
     "<CHAR>",
     "<IDENTIFIER>",
     "<NUMBER>",
+    "\"(\"",
+    "\")\"",
+    "\"[\"",
+    "\"]\"",
+    "\"{\"",
+    "\"}\"",
     "\"+\"",
     "\"-\"",
     "\"*\"",

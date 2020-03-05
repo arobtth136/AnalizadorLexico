@@ -13,7 +13,7 @@ public class analizador implements analizadorConstants {
     }
 
   static final public void Input() throws ParseException {
-    jj_consume_token(IDENTIFIER);
+    jj_consume_token(MAIN);
     jj_consume_token(0);
 }
 
@@ -174,7 +174,7 @@ public class analizador implements analizadorConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
 	 jj_expentries.clear();
-	 boolean[] la1tokens = new boolean[13];
+	 boolean[] la1tokens = new boolean[32];
 	 if (jj_kind >= 0) {
 	   la1tokens[jj_kind] = true;
 	   jj_kind = -1;
@@ -188,7 +188,7 @@ public class analizador implements analizadorConstants {
 		 }
 	   }
 	 }
-	 for (int i = 0; i < 13; i++) {
+	 for (int i = 0; i < 32; i++) {
 	   if (la1tokens[i]) {
 		 jj_expentry = new int[1];
 		 jj_expentry[0] = i;
