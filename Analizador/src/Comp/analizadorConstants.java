@@ -11,57 +11,69 @@ public interface analizadorConstants {
   /** RegularExpression Id. */
   int MAIN = 5;
   /** RegularExpression Id. */
-  int IF = 6;
+  int INT = 6;
   /** RegularExpression Id. */
-  int INT = 7;
+  int DECIMAL = 7;
   /** RegularExpression Id. */
-  int DECIMAL = 8;
+  int STRING = 8;
   /** RegularExpression Id. */
-  int STRING = 9;
+  int BOOLEAN = 9;
   /** RegularExpression Id. */
-  int BOOLEAN = 10;
+  int ASIGNACION = 10;
   /** RegularExpression Id. */
-  int ASIGNACION = 11;
+  int AND = 11;
   /** RegularExpression Id. */
-  int AND = 12;
+  int OR = 12;
   /** RegularExpression Id. */
-  int OR = 13;
+  int NOT = 13;
   /** RegularExpression Id. */
-  int NOT = 14;
+  int EQ = 14;
   /** RegularExpression Id. */
   int COLON = 15;
   /** RegularExpression Id. */
   int BIG = 16;
   /** RegularExpression Id. */
-  int LESS = 17;
+  int BIGEQ = 17;
   /** RegularExpression Id. */
-  int DIGITS = 18;
+  int LESS = 18;
   /** RegularExpression Id. */
-  int CHAR = 19;
+  int LESSEQ = 19;
   /** RegularExpression Id. */
-  int IDENTIFIER = 20;
+  int DOUBLECOMMA = 20;
   /** RegularExpression Id. */
-  int NUMBER = 21;
+  int DIGITS = 21;
   /** RegularExpression Id. */
-  int LPAREN = 22;
+  int CHAR = 22;
   /** RegularExpression Id. */
-  int RPAREN = 23;
+  int IDENTIFIER = 23;
   /** RegularExpression Id. */
-  int LBRACKET = 24;
+  int NUMBER = 24;
   /** RegularExpression Id. */
-  int RBRACKET = 25;
+  int LPAREN = 25;
   /** RegularExpression Id. */
-  int lBRACE = 26;
+  int RPAREN = 26;
   /** RegularExpression Id. */
-  int RBRACE = 27;
+  int LBRACKET = 27;
   /** RegularExpression Id. */
-  int PLUS = 28;
+  int RBRACKET = 28;
   /** RegularExpression Id. */
-  int MINUS = 29;
+  int lBRACE = 29;
   /** RegularExpression Id. */
-  int TIMES = 30;
+  int RBRACE = 30;
   /** RegularExpression Id. */
-  int DIVIDE = 31;
+  int PLUS = 31;
+  /** RegularExpression Id. */
+  int MINUS = 32;
+  /** RegularExpression Id. */
+  int TIMES = 33;
+  /** RegularExpression Id. */
+  int DIVIDE = 34;
+  /** RegularExpression Id. */
+  int INCR = 35;
+  /** RegularExpression Id. */
+  int DECR = 36;
+  /** RegularExpression Id. */
+  int IF = 37;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -74,18 +86,21 @@ public interface analizadorConstants {
     "\"\\n\"",
     "\"\\r\"",
     "\"def Main\"",
-    "\"if\"",
     "\"int\"",
     "\"decimal\"",
     "\"String\"",
-    "\"Bool\"",
+    "\"bool\"",
     "\"=\"",
     "\"and\"",
     "\"or\"",
     "\"not\"",
+    "\"==\"",
     "\":\"",
     "\">\"",
+    "\">=\"",
     "\"<\"",
+    "\"<=\"",
+    "\"\\\"\"",
     "<DIGITS>",
     "<CHAR>",
     "<IDENTIFIER>",
@@ -100,6 +115,9 @@ public interface analizadorConstants {
     "\"-\"",
     "\"*\"",
     "\"/\"",
+    "\"++\"",
+    "\"--\"",
+    "\"if\"",
   };
 
 }

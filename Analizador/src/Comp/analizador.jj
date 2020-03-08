@@ -23,14 +23,14 @@ SKIP :
     "\r" 
 }
 TOKEN : {
-    <MAIN : "def Main">{System.out.println("Main -> " + image);}|
+    <MAIN : "def Main">{System.out.println("Main -> " + image);}
 }
 
 TOKEN : {
     <INT : "int">|
     <DECIMAL : "decimal">|
     <STRING : "String">|
-    <BOOLEAN : "Bool">|
+    <BOOLEAN : "bool">|
     <ASIGNACION : "=">|
     <AND : "and">|
     <OR : "or">|
@@ -46,7 +46,7 @@ TOKEN : {
 TOKEN : {
     <#DIGITS : (["0"-"9"])+>|
     <#CHAR : (["a"-"z","A"-"Z"])+>|
-    <IDENTIFIER : <CHAR>(<DIGITS>|<CHAR>)*>|
+    <IDENTIFIER : <CHAR>(<DIGITS>|<CHAR>)*";">|
     <NUMBER : <DIGITS>|<DIGITS>"."<DIGITS>|<DIGITS>"."|"."<DIGITS>>
     
 }
@@ -62,18 +62,20 @@ TOKEN : {
     <PLUS : "+">|
     <MINUS : "-">|
     <TIMES : "*">|
-    <DIVIDE : "/">
-    <INCR : "++">
+    <DIVIDE : "/">|
+    <INCR : "++">|
     <DECR : "--">
 }
 //Sentencias
 TOKEN : {
-    <IF : "if">{System.out.println("if -> " + image)}
+    <IF : "if">{System.out.println("if -> " + image);}
 }
 void Input() :
-{
-}
+{}
 {
     <MAIN>
+    <lBRACE>
+    //Codigo()
+    <RBRACE>
     <EOF> 
 }
