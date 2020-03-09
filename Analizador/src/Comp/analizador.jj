@@ -19,7 +19,8 @@ SKIP :
 {
     " " |
     "\t" |
-    "\n" 
+    "\n" |
+    "\r"
 
 }
 TOKEN : {
@@ -57,12 +58,12 @@ TOKEN : {
     
 }
 TOKEN : {
-    <LPAREN : "(">|
-    <RPAREN : ")">|
-    <LBRACKET : "[">|
-    <RBRACKET : "]">|
-    <lBRACE : "{">|
-    <RBRACE : "}">
+    <LPAREN : "(">{System.out.println("( -> " + image);}|
+    <RPAREN : ")">{System.out.println(") -> " + image);}|
+    <LBRACKET : "[">{System.out.println("[ -> " + image);}|
+    <RBRACKET : "]">{System.out.println("] -> " + image);}|
+    <lBRACE : "{">{System.out.println("{ -> " + image);}|
+    <RBRACE : "}">{System.out.println("} -> " + image);}
 }
 TOKEN : {
     <PLUS : "+">|
