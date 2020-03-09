@@ -20,58 +20,57 @@ SKIP :
     " " |
     "\t" |
     "\n" |
-    "\r"
+    "\r" |
+    "\r\n"
 
 }
 TOKEN : {
-    <MAIN : "def Main">{System.out.println("Main -> " + image);}|
+    <DEF : "def">{System.out.println("Main function -> " + image);}|
     <END : "end">{System.out.println("end -> " + image);}
 }
 
 TOKEN : {
-    <INT : "int">|
+    <INT : "int">{System.out.println("integer -> " + image);}|
     <DECIMAL : "decimal">{System.out.println("decimal -> " + image);}|
     <STRING : "String">{System.out.println("String -> " + image);}|
     <BOOLEAN : "bool">{System.out.println("bool -> " + image);}|
-    <ASIGNACION : "=">{System.out.println("= -> " + image);}|
-    <PLUS_EQ : "+=">{System.out.println("+= -> " + image);}|
-    <MINUS_EQ : "-=">{System.out.println("-= -> " + image);}|
-    <TIMES_EQ : "*=">{System.out.println("*= -> " + image);}|
-    <DIVIDE_EQ : "/=">{System.out.println("/= -> " + image);}| 
+    <ASIGNACION : "=">{System.out.println("Equal -> " + image);}|
+    <PLUS_EQ : "+=">{System.out.println("Plus equal -> " + image);}|
+    <MINUS_EQ : "-=">{System.out.println("Minus equal -> " + image);}|
+    <TIMES_EQ : "*=">{System.out.println("Times equal -> " + image);}|
+    <DIVIDE_EQ : "/=">{System.out.println("Divide equal -> " + image);}| 
     <AND : "and">{System.out.println("and -> " + image);}|
     <OR : "or">{System.out.println("or -> " + image);}|
     <NOT : "not">{System.out.println("not -> " + image);}|
-    <EQ : "==">{System.out.println("==-> " + image);}|
-    <COLON : ":">{System.out.println(": -> " + image);}|
-    <BIG : ">">{System.out.println("> -> " + image);}|
-    <BIGEQ : ">=">{System.out.println(">= -> " + image);}|
-    <LESS : "<">{System.out.println("< -> " + image);}|
-    <LESSEQ : "<=">{System.out.println("<= -> " + image);}|
-    <DOUBLECOMMA: "\"">{System.out.println("\" -> " + image);}| 
-    <NOTEQ : "notEq">{System.out.println("notEq -> " + image);}
+    <EQ : "==">{System.out.println("Equal -> " + image);}|
+    <COLON : ":">{System.out.println("Double colon -> " + image);}|
+    <BIG : ">">{System.out.println("Biggest -> " + image);}|
+    <BIGEQ : ">=">{System.out.println("Biggest equal -> " + image);}|
+    <LESS : "<">{System.out.println("Minus -> " + image);}|
+    <LESSEQ : "<=">{System.out.println("Minus equal -> " + image);}|
+    <DOUBLECOMMA: "\"">{System.out.println("Double comma -> " + image);}| 
+    <NOTEQ : "notEq">{System.out.println("Not equal -> " + image);}
 }
 TOKEN : {
-    <#DIGITS : (["0"-"9"])+>|
-    <#CHAR : (["a"-"z","A"-"Z"])+>|
-    <IDENTIFIER : <CHAR>(<DIGITS>|<CHAR>)*>|
-    <NUMBER : <DIGITS>|<DIGITS>"."<DIGITS>|<DIGITS>"."|"."<DIGITS>>
+    <IDENTIFIER : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])*>{System.out.println("Identifier -> " + image);}|
+    <NUMBER : (["0"-"9"])|(["0"-"9"])"."(["0"-"9"])|(["0"-"9"])"."|"."(["0"-"9"])>{System.out.println("Number -> " + image);}
     
 }
 TOKEN : {
-    <LPAREN : "(">{System.out.println("( -> " + image);}|
-    <RPAREN : ")">{System.out.println(") -> " + image);}|
-    <LBRACKET : "[">{System.out.println("[ -> " + image);}|
-    <RBRACKET : "]">{System.out.println("] -> " + image);}|
-    <lBRACE : "{">{System.out.println("{ -> " + image);}|
-    <RBRACE : "}">{System.out.println("} -> " + image);}
+    <LPAREN : "(">{System.out.println("Left paren -> " + image);}|
+    <RPAREN : ")">{System.out.println("Right paren -> " + image);}|
+    <LBRACKET : "[">{System.out.println("Left bracket -> " + image);}|
+    <RBRACKET : "]">{System.out.println("Right bracket -> " + image);}|
+    <lBRACE : "{">{System.out.println("Left brace -> " + image);}|
+    <RBRACE : "}">{System.out.println("Right brace -> " + image);}
 }
 TOKEN : {
-    <PLUS : "+">|
-    <MINUS : "-">|
-    <TIMES : "*">|
-    <DIVIDE : "/">|
-    <INCR : "++">|
-    <DECR : "--">
+    <PLUS : "+">{System.out.println("Plus -> " + image);}|
+    <MINUS : "-">{System.out.println("Minus -> " + image);}|
+    <TIMES : "*">{System.out.println("Times -> " + image);}|
+    <DIVIDE : "/">{System.out.println("Divide -> " + image);}|
+    <INCR : "++">{System.out.println("Increment -> " + image);}|
+    <DECR : "--">{System.out.println("Decrement -> " + image);}
 }
 //Sentencias
 TOKEN : {
@@ -88,8 +87,20 @@ TOKEN : {
 void Input() :
 {}
 {
-    <MAIN>
-    <lBRACE>
-    <RBRACE>
+    <DEF>
+    <IDENTIFIER>
+    <COLON>
+    Code()
+    <END>
     <EOF> 
+}
+void Code() :
+{}
+{
+    LOOKAHEAD(2)Variables() | Main()
+}
+void Variables() :
+{}
+{
+    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER>
 }
