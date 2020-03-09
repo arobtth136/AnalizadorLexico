@@ -46,7 +46,7 @@ TOKEN : {
 TOKEN : {
     <#DIGITS : (["0"-"9"])+>|
     <#CHAR : (["a"-"z","A"-"Z"])+>|
-    <IDENTIFIER : <CHAR>(<DIGITS>|<CHAR>)*";">|
+    <IDENTIFIER : <CHAR>(<DIGITS>|<CHAR>)*>|
     <NUMBER : <DIGITS>|<DIGITS>"."<DIGITS>|<DIGITS>"."|"."<DIGITS>>
     
 }
@@ -70,12 +70,16 @@ TOKEN : {
 TOKEN : {
     <IF : "if">{System.out.println("if -> " + image);}
 }
+//Ciclos
+TOKEN : {
+    <WHILE : "while">{System.out.println("while -> " + image);}|
+    <FOR : "for">{System.out.println("for -> " + image);}
+}
 void Input() :
 {}
 {
     <MAIN>
     <lBRACE>
-    //Codigo()
     <RBRACE>
     <EOF> 
 }

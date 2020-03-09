@@ -74,6 +74,10 @@ public interface analizadorConstants {
   int DECR = 36;
   /** RegularExpression Id. */
   int IF = 37;
+  /** RegularExpression Id. */
+  int WHILE = 38;
+  /** RegularExpression Id. */
+  int FOR = 39;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -118,6 +122,8 @@ public interface analizadorConstants {
     "\"++\"",
     "\"--\"",
     "\"if\"",
+    "\"while\"",
+    "\"for\"",
   };
 
 }
