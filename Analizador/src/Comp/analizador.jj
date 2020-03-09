@@ -20,43 +20,50 @@ SKIP :
     " " |
     "\t" |
     "\n" |
-    "\r" 
+    "\r"
+
 }
 TOKEN : {
-    <MAIN : "def Main">{System.out.println("Main -> " + image);}
+    <MAIN : "def Main">{System.out.println("Main -> " + image);}|
+    <END : "end">{System.out.println("end -> " + image);}
 }
 
 TOKEN : {
     <INT : "int">|
-    <DECIMAL : "decimal">|
-    <STRING : "String">|
-    <BOOLEAN : "bool">|
-    <ASIGNACION : "=">|
-    <AND : "and">|
-    <OR : "or">|
-    <NOT : "not">|
-    <EQ : "==">|
-    <COLON : ":">|
-    <BIG : ">">|
-    <BIGEQ : ">=">|
-    <LESS : "<">|
-    <LESSEQ : "<=">|
-    <DOUBLECOMMA: "\""> 
+    <DECIMAL : "decimal">{System.out.println("decimal -> " + image);}|
+    <STRING : "String">{System.out.println("String -> " + image);}|
+    <BOOLEAN : "bool">{System.out.println("bool -> " + image);}|
+    <ASIGNACION : "=">{System.out.println("= -> " + image);}|
+    <PLUS_EQ : "+=">{System.out.println("+= -> " + image);}|
+    <MINUS_EQ : "-=">{System.out.println("-= -> " + image);}|
+    <TIMES_EQ : "*=">{System.out.println("*= -> " + image);}|
+    <DIVIDE_EQ : "/=">{System.out.println("/= -> " + image);}| 
+    <AND : "and">{System.out.println("and -> " + image);}|
+    <OR : "or">{System.out.println("or -> " + image);}|
+    <NOT : "not">{System.out.println("not -> " + image);}|
+    <EQ : "==">{System.out.println("==-> " + image);}|
+    <COLON : ":">{System.out.println(": -> " + image);}|
+    <BIG : ">">{System.out.println("> -> " + image);}|
+    <BIGEQ : ">=">{System.out.println(">= -> " + image);}|
+    <LESS : "<">{System.out.println("< -> " + image);}|
+    <LESSEQ : "<=">{System.out.println("<= -> " + image);}|
+    <DOUBLECOMMA: "\"">{System.out.println("\" -> " + image);}| 
+    <NOTEQ : "notEq">{System.out.println("notEq -> " + image);}
 }
 TOKEN : {
     <#DIGITS : (["0"-"9"])+>|
     <#CHAR : (["a"-"z","A"-"Z"])+>|
-    <IDENTIFIER : <CHAR>(<DIGITS>|<CHAR>)*";">|
+    <IDENTIFIER : <CHAR>(<DIGITS>|<CHAR>)*>|
     <NUMBER : <DIGITS>|<DIGITS>"."<DIGITS>|<DIGITS>"."|"."<DIGITS>>
     
 }
 TOKEN : {
-    <LPAREN : "(">|
-    <RPAREN : ")">|
-    <LBRACKET : "[">|
-    <RBRACKET : "]">|
-    <lBRACE : "{">|
-    <RBRACE : "}">
+    <LPAREN : "(">{System.out.println("( -> " + image);}|
+    <RPAREN : ")">{System.out.println(") -> " + image);}|
+    <LBRACKET : "[">{System.out.println("[ -> " + image);}|
+    <RBRACKET : "]">{System.out.println("] -> " + image);}|
+    <lBRACE : "{">{System.out.println("{ -> " + image);}|
+    <RBRACE : "}">{System.out.println("} -> " + image);}
 }
 TOKEN : {
     <PLUS : "+">|
@@ -68,14 +75,21 @@ TOKEN : {
 }
 //Sentencias
 TOKEN : {
-    <IF : "if">{System.out.println("if -> " + image);}
+    <IF : "if">{System.out.println("if -> " + image);}|
+    <ELSE : "else">{System.out.println("else -> " + image); }|
+    <ELSE_IF : "else if">{System.out.println("else if ->" + image); }|
+    <BREAK : "break">{System.out.println("break -> " + image);}
+}
+//Ciclos
+TOKEN : {
+    <WHILE : "while">{System.out.println("while -> " + image);}|
+    <FOR : "for">{System.out.println("for -> " + image);}
 }
 void Input() :
 {}
 {
     <MAIN>
     <lBRACE>
-    //Codigo()
     <RBRACE>
     <EOF> 
 }
