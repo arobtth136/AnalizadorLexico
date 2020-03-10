@@ -25,7 +25,7 @@ SKIP :
 
 }
 TOKEN : {
-    <DEF : "def">{System.out.println("Main function -> " + image);}|
+    <DEF : "def">{System.out.println("function -> " + image);}|
     <END : "end">{System.out.println("end -> " + image);}
 }
 
@@ -87,20 +87,8 @@ TOKEN : {
 void Input() :
 {}
 {
-    <DEF>
-    <IDENTIFIER>
-    <COLON>
-    Code()
+    <DEF> <IDENTIFIER> <COLON>
+    
     <END>
     <EOF> 
-}
-void Code() :
-{}
-{
-    LOOKAHEAD(2)Variables() | Main()
-}
-void Variables() :
-{}
-{
-    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER>
 }
