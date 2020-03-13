@@ -77,7 +77,12 @@ TOKEN : {
     <IF : "if">{System.out.println("if -> " + image);}|
     <ELSE : "else">{System.out.println("else -> " + image); }|
     <ELSE_IF : "else if">{System.out.println("else if ->" + image); }|
-    <BREAK : "break">{System.out.println("break -> " + image);}
+    <BREAK : "break">{System.out.println("break -> " + image);}|
+    <SWITCH : "switch">{System.out.println("switch -> " + image);}|
+    <CASE : "case">{System.out.println("case -> " + image);}|
+    <DEFAULT_CASE : "default">{System.out.println("default -> " + image);}|
+    <PRINT : "print">{System.out.println("print -> " + image);}|
+    <INPUT : "input">{System.out.println("input -> " + image);}
 }
 //Ciclos
 TOKEN : {
