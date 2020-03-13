@@ -105,16 +105,46 @@ void Code() :
 {
     Sentencias()
 }
-void Variables() :
-{}
-{
-    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER>
-}
 void Sentencias() :
 {}
 {
+    
     Variables()|
-    SentenciaIf()|
-    SentenciaFor()|
-    SentenciaWhile()|
+    SentenciaIf()
+    //SentenciaFor()|
+    //SentenciaWhile()|
+    //SentenciaSwitch()|
+    //Imprimir()
+    
+}
+void Variables() :
+{}
+{
+    (
+    //int ads
+    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER>|
+    //int ads = 4 || int b = a
+    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER><EQ><IDENTIFIER>|<NUMBER>|
+    //String cadena = "aver je"
+    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER><EQ><DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)<DOUBLECOMMA>
+    //int suma = a + b || int op = a + b - c * x + 5
+    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER><EQ>((<IDENTIFIER>|<NUMBER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<IDENTIFIER>|<NUMBER>))*
+    )*
+}
+void SentenciaIf() :
+{}
+{
+    <IF>Comparacion()<COLON>
+        Sentencias()
+    <END>
+}
+void Comparacion() : 
+{}
+{
+    //if true
+    <IDENTIFIER>|
+    //if a < b
+    <IDENTIFIER>(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>)<IDENTIFIER>|
+    //if a not b or a < b
+    (<IDENTIFIER>(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>)<IDENTIFIER>(<OR>|<AND>|<NOT>)Comparacion())*
 }
