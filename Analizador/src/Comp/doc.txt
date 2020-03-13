@@ -1,3 +1,9 @@
 def isEven :
     int asb
 end
+def isOdd :
+    int asb
+end
+def fibonacci :
+    int asb
+end

@@ -85,7 +85,8 @@ TOKEN : {
     <FOR : "for">{System.out.println("for -> " + image);}
 }
 void Input() :
-{}
+{
+}
 {
     <DEF>
     <IDENTIFIER>
@@ -97,10 +98,18 @@ void Input() :
 void Code() :
 {}
 {
-    LOOKAHEAD(2)Variables() | Main()
+    Sentencias()
 }
 void Variables() :
 {}
 {
     (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER>
+}
+void Sentencias() :
+{}
+{
+    Variables()|
+    SentenciaIf()|
+    SentenciaFor()|
+    SentenciaWhile()|
 }
