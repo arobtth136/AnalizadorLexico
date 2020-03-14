@@ -1,3 +1,6 @@
+options {
+	LOOKAHEAD = 3;
+}
 PARSER_BEGIN(analizador)
 
 public class analizador {
@@ -34,7 +37,7 @@ TOKEN : {
     <DECIMAL : "decimal">{System.out.println("decimal -> " + image);}|
     <STRING : "String">{System.out.println("String -> " + image);}|
     <BOOLEAN : "bool">{System.out.println("bool -> " + image);}|
-    <ASIGNACION : "=">{System.out.println("Equal -> " + image);}|
+    <ASIGNACION : "=">{System.out.println("Asignacion -> " + image);}|
     <PLUS_EQ : "+=">{System.out.println("Plus equal -> " + image);}|
     <MINUS_EQ : "-=">{System.out.println("Minus equal -> " + image);}|
     <TIMES_EQ : "*=">{System.out.println("Times equal -> " + image);}|
@@ -124,11 +127,11 @@ void Variables() :
     //int ads
     (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER>|
     //int ads = 4 || int b = a
-    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER><EQ><IDENTIFIER>|<NUMBER>|
+    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER><ASIGNACION><IDENTIFIER>|<NUMBER>|
     //String cadena = "aver je"
-    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER><EQ><DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)<DOUBLECOMMA>
+    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER><ASIGNACION><DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)<DOUBLECOMMA>
     //int suma = a + b || int op = a + b - c * x + 5
-    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER><EQ>((<IDENTIFIER>|<NUMBER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<IDENTIFIER>|<NUMBER>))*
+    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER><ASIGNACION>((<IDENTIFIER>|<NUMBER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<IDENTIFIER>|<NUMBER>))*
     )*
 }
 void SentenciaIf() :
