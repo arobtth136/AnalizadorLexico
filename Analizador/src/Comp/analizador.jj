@@ -1,3 +1,6 @@
+options {
+	LOOKAHEAD = 3;
+}
 PARSER_BEGIN(analizador)
 
 public class analizador {
@@ -34,7 +37,7 @@ TOKEN : {
     <DECIMAL : "decimal">{System.out.println("decimal -> " + image);}|
     <STRING : "String">{System.out.println("String -> " + image);}|
     <BOOLEAN : "bool">{System.out.println("bool -> " + image);}|
-    <ASIGNACION : "=">{System.out.println("Equal -> " + image);}|
+    <ASIGNACION : "=">{System.out.println("Asignacion -> " + image);}|
     <PLUS_EQ : "+=">{System.out.println("Plus equal -> " + image);}|
     <MINUS_EQ : "-=">{System.out.println("Minus equal -> " + image);}|
     <TIMES_EQ : "*=">{System.out.println("Times equal -> " + image);}|
@@ -90,7 +93,8 @@ TOKEN : {
     <FOR : "for">{System.out.println("for -> " + image);}
 }
 void Input() :
-{}
+{
+}
 {
     <DEF>
     <IDENTIFIER>
@@ -102,10 +106,48 @@ void Input() :
 void Code() :
 {}
 {
-    LOOKAHEAD(2)Variables() | Main()
+    Sentencias()
+}
+void Sentencias() :
+{}
+{
+    
+    Variables()|
+    SentenciaIf()
+    //SentenciaFor()|
+    //SentenciaWhile()|
+    //SentenciaSwitch()|
+    //Imprimir()
+    
 }
 void Variables() :
 {}
 {
-    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER>
+    (
+    //int ads
+    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER>|
+    //int ads = 4 || int b = a
+    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER><ASIGNACION><IDENTIFIER>|<NUMBER>|
+    //String cadena = "aver je"
+    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER><ASIGNACION><DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)<DOUBLECOMMA>
+    //int suma = a + b || int op = a + b - c * x + 5
+    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER><ASIGNACION>((<IDENTIFIER>|<NUMBER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<IDENTIFIER>|<NUMBER>))*
+    )*
+}
+void SentenciaIf() :
+{}
+{
+    <IF>Comparacion()<COLON>
+        Sentencias()
+    <END>
+}
+void Comparacion() : 
+{}
+{
+    //if true
+    <IDENTIFIER>|
+    //if a < b
+    <IDENTIFIER>(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>)<IDENTIFIER>|
+    //if a not b or a < b
+    (<IDENTIFIER>(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>)<IDENTIFIER>(<OR>|<AND>|<NOT>)Comparacion())*
 }

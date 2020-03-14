@@ -1,3 +1,4 @@
-def isEven :
+def function :
     int asb
+    int b
 end
