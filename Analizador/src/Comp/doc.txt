@@ -1,4 +1,3 @@
 def function :
-    int asb
-    int b
+    int a = "caca"
 end

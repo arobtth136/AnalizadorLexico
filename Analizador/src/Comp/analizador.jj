@@ -1,5 +1,5 @@
 options {
-	LOOKAHEAD = 3;
+	LOOKAHEAD = 2;
 }
 PARSER_BEGIN(analizador)
 
@@ -106,39 +106,46 @@ void Input() :
 void Code() :
 {}
 {
+    Variables()|
+    //VariableAsignacion()|
+    //VariableOperacion()|
     Sentencias()
 }
 void Sentencias() :
 {}
 {
-    
-    Variables()|
-    SentenciaIf()
-    //SentenciaFor()|
-    //SentenciaWhile()|
-    //SentenciaSwitch()|
-    //Imprimir()
-    
+    (
+        SentenciaIf()
+        //SentenciaFor()|
+        //SentenciaWhile()|
+        //SentenciaSwitch()|
+        //Imprimir()
+    )*
+}
+void TipoDato() :
+{}
+{
+    <INT>|
+    <DECIMAL>|
+    <STRING>|
+    <BOOLEAN>
 }
 void Variables() :
 {}
 {
     (
-    //int ads
-    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER>|
-    //int ads = 4 || int b = a
-    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER><ASIGNACION><IDENTIFIER>|<NUMBER>|
-    //String cadena = "aver je"
-    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER><ASIGNACION><DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)<DOUBLECOMMA>
-    //int suma = a + b || int op = a + b - c * x + 5
-    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER><ASIGNACION>((<IDENTIFIER>|<NUMBER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<IDENTIFIER>|<NUMBER>))*
+        TipoDato()<IDENTIFIER><ASIGNACION>((<IDENTIFIER>|<NUMBER>)|<DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)<DOUBLECOMMA>)
+        //int ads
+        //TipoDato()<IDENTIFIER>
+        //int suma = a + b || int op = a + b - c * x + 5
+        //TipoDato()<IDENTIFIER><ASIGNACION>((<IDENTIFIER>|<NUMBER>)*(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<IDENTIFIER>|<NUMBER>)*)* 
     )*
 }
 void SentenciaIf() :
 {}
 {
     <IF>Comparacion()<COLON>
-        Sentencias()
+        Code()
     <END>
 }
 void Comparacion() : 
