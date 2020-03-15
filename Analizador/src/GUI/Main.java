@@ -1,46 +1,52 @@
 package GUI;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class Main extends javax.swing.JFrame {
 
     File f;
     JFileChooser fc;
-    Scanner sc;
     BufferedReader br;
     String l;
 
     public Main() {
-        fc = new JFileChooser();
         initComponents();
+        //Mostrar Frame al centro
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
-        panel1 = new java.awt.Panel();
+        panelBotones = new java.awt.Panel();
         btnAnalizar = new javax.swing.JButton();
         btnAbrir = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        lbAnalizadorLexico = new javax.swing.JLabel();
+        lbCobra = new javax.swing.JLabel();
+        lbLogo = new javax.swing.JLabel();
+        panelCodigo = new javax.swing.JPanel();
         txtCodigo = new java.awt.TextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Cobra - Analizador léxico");
         setBackground(new java.awt.Color(255, 255, 255));
 
-        panel1.setBackground(new java.awt.Color(35, 98, 236));
-        panel1.setPreferredSize(new java.awt.Dimension(307, 782));
+        panelBotones.setBackground(new java.awt.Color(35, 98, 236));
+        panelBotones.setPreferredSize(new java.awt.Dimension(307, 782));
 
         btnAnalizar.setBackground(new java.awt.Color(255, 255, 255));
         btnAnalizar.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -50,11 +56,16 @@ public class Main extends javax.swing.JFrame {
         btnAnalizar.setContentAreaFilled(false);
         btnAnalizar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAnalizar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnAnalizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnalizarActionPerformed(evt);
+            }
+        });
 
         btnAbrir.setBackground(new java.awt.Color(255, 255, 255));
         btnAbrir.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         btnAbrir.setForeground(new java.awt.Color(255, 255, 255));
-        btnAbrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/folder.png"))); // NOI18N
+        btnAbrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/folder (1).png"))); // NOI18N
         btnAbrir.setText("   Abrir");
         btnAbrir.setBorderPainted(false);
         btnAbrir.setContentAreaFilled(false);
@@ -67,77 +78,65 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/snake2.png"))); // NOI18N
+        lbAnalizadorLexico.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        lbAnalizadorLexico.setForeground(new java.awt.Color(255, 255, 255));
+        lbAnalizadorLexico.setText("Analizador léxico");
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("ANALIZADOR LÉXICO");
+        lbCobra.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        lbCobra.setForeground(new java.awt.Color(255, 255, 255));
+        lbCobra.setText("Cobra");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("COBRA");
+        lbLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/snake.png"))); // NOI18N
 
-        javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
-        panel1.setLayout(panel1Layout);
-        panel1Layout.setHorizontalGroup(
-            panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnAnalizar, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
+        javax.swing.GroupLayout panelBotonesLayout = new javax.swing.GroupLayout(panelBotones);
+        panelBotones.setLayout(panelBotonesLayout);
+        panelBotonesLayout.setHorizontalGroup(
+            panelBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnAnalizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnAbrir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panel1Layout.createSequentialGroup()
-                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panel1Layout.createSequentialGroup()
-                                .addGap(51, 51, 51)
-                                .addComponent(jLabel2))
-                            .addGroup(panel1Layout.createSequentialGroup()
-                                .addGap(74, 74, 74)
-                                .addComponent(jLabel3)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(24, 24, 24))
+            .addGroup(panelBotonesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lbLogo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbAnalizadorLexico)
+                    .addComponent(lbCobra))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        panel1Layout.setVerticalGroup(
-            panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel1Layout.createSequentialGroup()
-                .addContainerGap(270, Short.MAX_VALUE)
+        panelBotonesLayout.setVerticalGroup(
+            panelBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBotonesLayout.createSequentialGroup()
+                .addContainerGap(217, Short.MAX_VALUE)
                 .addComponent(btnAbrir, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnAnalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(151, 151, 151)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
+                .addGap(285, 285, 285)
+                .addGroup(panelBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lbLogo)
+                    .addGroup(panelBotonesLayout.createSequentialGroup()
+                        .addComponent(lbCobra)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbAnalizadorLexico)))
                 .addContainerGap())
         );
 
-        getContentPane().add(panel1, java.awt.BorderLayout.WEST);
+        getContentPane().add(panelBotones, java.awt.BorderLayout.WEST);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        panelCodigo.setBackground(new java.awt.Color(255, 255, 255));
+        panelCodigo.setLayout(new java.awt.BorderLayout());
 
-        txtCodigo.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
+        txtCodigo.setFont(new java.awt.Font("Monospaced", 0, 16)); // NOI18N
+        panelCodigo.add(txtCodigo, java.awt.BorderLayout.CENTER);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(txtCodigo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 718, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(txtCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, 782, Short.MAX_VALUE)
-        );
-
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+        getContentPane().add(panelCodigo, java.awt.BorderLayout.CENTER);
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void btnAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirActionPerformed
+    private void btnAbrirActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        fc = new JFileChooser();
         fc.showOpenDialog(null);
+        //Cargar TXT
         if (fc.getSelectedFile() != null) {
             f = fc.getSelectedFile();
             try {
@@ -146,20 +145,30 @@ public class Main extends javax.swing.JFrame {
             }
             try {
                 l = br.readLine();
+                txtCodigo.setText(null);
             } catch (IOException ex) {
             }
             while (l != null) {
+                //Llenar el cuadro de texto
                 txtCodigo.append(l);
                 txtCodigo.append(System.lineSeparator());
                 try {
                     l = br.readLine();
                 } catch (IOException ex) {
-                    
+
                 }
             }
+        } else {
+            //Beep
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un archivo", "Error", JOptionPane.ERROR_MESSAGE);
 
         }
-    }//GEN-LAST:event_btnAbrirActionPerformed
+    }                                        
+
+    private void btnAnalizarActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        
+    }                                           
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -188,20 +197,33 @@ public class Main extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                //Hacer que se parezca a Windows
+                try {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (UnsupportedLookAndFeelException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 new Main().setVisible(true);
+
             }
         });
     }
 
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JButton btnAbrir;
     private javax.swing.JButton btnAnalizar;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    private java.awt.Panel panel1;
+    private javax.swing.JLabel lbAnalizadorLexico;
+    private javax.swing.JLabel lbCobra;
+    private javax.swing.JLabel lbLogo;
+    private java.awt.Panel panelBotones;
+    private javax.swing.JPanel panelCodigo;
     private java.awt.TextArea txtCodigo;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 }
