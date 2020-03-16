@@ -1,3 +1,4 @@
 def function :
-    int a = "caca"
+    op = "caca"
+    caca = 3 + 1
 end

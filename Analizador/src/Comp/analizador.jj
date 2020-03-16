@@ -33,10 +33,10 @@ TOKEN : {
 }
 
 TOKEN : {
-    <INT : "int">{System.out.println("integer -> " + image);}|
+    /*<INT : "int">{System.out.println("integer -> " + image);}|
     <DECIMAL : "decimal">{System.out.println("decimal -> " + image);}|
     <STRING : "String">{System.out.println("String -> " + image);}|
-    <BOOLEAN : "bool">{System.out.println("bool -> " + image);}|
+    <BOOLEAN : "bool">{System.out.println("bool -> " + image);}|*/
     <ASIGNACION : "=">{System.out.println("Asignacion -> " + image);}|
     <PLUS_EQ : "+=">{System.out.println("Plus equal -> " + image);}|
     <MINUS_EQ : "-=">{System.out.println("Minus equal -> " + image);}|
@@ -107,39 +107,36 @@ void Code() :
 {}
 {
     Variables()|
-    //VariableAsignacion()|
-    //VariableOperacion()|
     Sentencias()
 }
-void Sentencias() :
-{}
-{
-    (
-        SentenciaIf()
-        //SentenciaFor()|
-        //SentenciaWhile()|
-        //SentenciaSwitch()|
-        //Imprimir()
-    )*
-}
-void TipoDato() :
+/*void TipoDato() :
 {}
 {
     <INT>|
     <DECIMAL>|
     <STRING>|
     <BOOLEAN>
-}
+}*/
 void Variables() :
 {}
 {
-    (
-        TipoDato()<IDENTIFIER><ASIGNACION>((<IDENTIFIER>|<NUMBER>)|<DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)<DOUBLECOMMA>)
-        //int ads
-        //TipoDato()<IDENTIFIER>
+        
+        (<IDENTIFIER><ASIGNACION>((<IDENTIFIER>|<NUMBER>)|(<DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)<DOUBLECOMMA>))|
+        (<IDENTIFIER>|<NUMBER>)*(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<IDENTIFIER>|<NUMBER>)*)Code()
         //int suma = a + b || int op = a + b - c * x + 5
-        //TipoDato()<IDENTIFIER><ASIGNACION>((<IDENTIFIER>|<NUMBER>)*(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<IDENTIFIER>|<NUMBER>)*)* 
-    )*
+        //<IDENTIFIER><ASIGNACION>((<IDENTIFIER>|<NUMBER>)*(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<IDENTIFIER>|<NUMBER>)*)*Code() 
+        
+}
+void Sentencias() :
+{}
+{
+    
+        SentenciaIf()
+        //SentenciaFor()|
+        //SentenciaWhile()|
+        //SentenciaSwitch()|
+        //Imprimir()
+    
 }
 void SentenciaIf() :
 {}
