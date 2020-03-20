@@ -1,0 +1,3 @@
+def pedrozaSocsDics :
+    int a
+end
