@@ -33,10 +33,6 @@ TOKEN : {
 }
 
 TOKEN : {
-    /*<INT : "int">{System.out.println("integer -> " + image);}|
-    <DECIMAL : "decimal">{System.out.println("decimal -> " + image);}|
-    <STRING : "String">{System.out.println("String -> " + image);}|
-    <BOOLEAN : "bool">{System.out.println("bool -> " + image);}|*/
     <ASIGNACION : "=">{System.out.println("Asignacion -> " + image);}|
     <PLUS_EQ : "+=">{System.out.println("Plus equal -> " + image);}|
     <MINUS_EQ : "-=">{System.out.println("Minus equal -> " + image);}|
@@ -52,7 +48,7 @@ TOKEN : {
     <LESS : "<">{System.out.println("Minus -> " + image);}|
     <LESSEQ : "<=">{System.out.println("Minus equal -> " + image);}|
     <DOUBLECOMMA: "\"">{System.out.println("Double comma -> " + image);}| 
-    <NOTEQ : "notEq">{System.out.println("Not equal -> " + image);}
+    <NOTEQ : "!=">{System.out.println("Not equal -> " + image);}
 }
 TOKEN : {
     <IDENTIFIER : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])*>{System.out.println("Identifier -> " + image);}|
