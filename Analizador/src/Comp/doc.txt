@@ -1,4 +1,4 @@
 def function :
-    op = "caca"
-    caca = 3 + 1
+    op = "Nombre"
+    contador = 3 + 1
 end

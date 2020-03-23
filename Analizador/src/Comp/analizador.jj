@@ -50,6 +50,7 @@ TOKEN : {
     <DOUBLECOMMA: "\"">{System.out.println("Double comma -> " + image);}| 
     <NOTEQ : "!=">{System.out.println("Not equal -> " + image);}
 }
+//Tipos de datos
 TOKEN : {
     <IDENTIFIER : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])*>{System.out.println("Identifier -> " + image);}|
     <NUMBER : (["0"-"9"])|(["0"-"9"])"."(["0"-"9"])|(["0"-"9"])"."|"."(["0"-"9"])>{System.out.println("Number -> " + image);}
@@ -61,7 +62,9 @@ TOKEN : {
     <LBRACKET : "[">{System.out.println("Left bracket -> " + image);}|
     <RBRACKET : "]">{System.out.println("Right bracket -> " + image);}|
     <lBRACE : "{">{System.out.println("Left brace -> " + image);}|
+    <COMMA : ",">{System.out.println("Comma -> " + image);}|
     <RBRACE : "}">{System.out.println("Right brace -> " + image);}
+
 }
 TOKEN : {
     <PLUS : "+">{System.out.println("Plus -> " + image);}|
@@ -127,10 +130,10 @@ void Sentencias() :
 {}
 {
     
-        SentenciaIf()
+        SentenciaIf()|
         //SentenciaFor()|
         //SentenciaWhile()|
-        //SentenciaSwitch()|
+        SentenciaSwitch()
         //Imprimir()
     
 }
@@ -151,3 +154,10 @@ void Comparacion() :
     //if a not b or a < b
     (<IDENTIFIER>(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>)<IDENTIFIER>(<OR>|<AND>|<NOT>)Comparacion())*
 }
+//Sintaxis de la sentencia del metodo Switch
+void  SentenciaSwitch() :
+{}
+{
+    <SWITCH><LPAREN><IDENTIFIER><RPAREN><lBRACE>(<CASE>(<IDENTIFIER>|<NUMBER>)<COLON>(Sentencias())+ <BREAK>)+[<DEFAULT_CASE><COLON>(Sentencias())<BREAK>]<RBRACE>
+}
+
