@@ -42,6 +42,7 @@ TOKEN : {
     <DEFAULT_CASE : "default">{System.out.println("default -> " + image);}|
     <PRINT : "print">{System.out.println("print -> " + image);}|
     <INPUT : "input">{System.out.println("input -> " + image);}
+    <IN : "in">{System.out.println("in -> " + image);}
 }
 //Ciclos
 TOKEN : {
@@ -135,7 +136,7 @@ void Sentencias() :
 {
     (
         SentenciaIf()|
-        //SentenciaFor()|
+        SentenciaFor()|
         //SentenciaWhile()|
         SentenciaSwitch()
         //Imprimir()
@@ -171,4 +172,10 @@ void  SentenciaSwitch() :
     (Code())
     <BREAK><EOL>]
     <RBRACE><EOL>
+}
+void SentenciaFor() :
+{
+        //for i | for numero in [0 1 2 3 4] | in ("hola") | in ["mike jorge 29"]
+	<FOR><IDENTIFIER><IN>(<LPAREN>|<LBRACKET>)([<DOUBLECOMMA>]<IDENTIFIER>[<DOUBLECOMMA>]|<NUMBER>)(<RPARENT>|<RBRACKET>)<COLON>
+   <END>
 }
