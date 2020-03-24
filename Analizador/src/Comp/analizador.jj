@@ -1,5 +1,6 @@
 options {
-	LOOKAHEAD = 3;
+	LOOKAHEAD = 4;
+    FORCE_LA_CHECK = true;
 }
 PARSER_BEGIN(analizador)
 
@@ -22,7 +23,7 @@ SKIP :
 {
     " " |
     "\t" |
-    "\n" |
+    //"\n" |
     "\r" |
     "\r\n"
 
@@ -33,10 +34,6 @@ TOKEN : {
 }
 
 TOKEN : {
-    <INT : "int">{System.out.println("integer -> " + image);}|
-    <DECIMAL : "decimal">{System.out.println("decimal -> " + image);}|
-    <STRING : "String">{System.out.println("String -> " + image);}|
-    <BOOLEAN : "bool">{System.out.println("bool -> " + image);}|
     <ASIGNACION : "=">{System.out.println("Asignacion -> " + image);}|
     <PLUS_EQ : "+=">{System.out.println("Plus equal -> " + image);}|
     <MINUS_EQ : "-=">{System.out.println("Minus equal -> " + image);}|
@@ -52,10 +49,11 @@ TOKEN : {
     <LESS : "<">{System.out.println("Minus -> " + image);}|
     <LESSEQ : "<=">{System.out.println("Minus equal -> " + image);}|
     <DOUBLECOMMA: "\"">{System.out.println("Double comma -> " + image);}| 
-    <NOTEQ : "notEq">{System.out.println("Not equal -> " + image);}
+    <NOTEQ : "!=">{System.out.println("Not equal -> " + image);}
 }
 TOKEN : {
-    <IDENTIFIER : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])*>{System.out.println("Identifier -> " + image);}|
+    <#CHAR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])*>|
+    <IDENTIFIER : (<CHAR>)*>{System.out.println("Identifier -> " + image);}|
     <NUMBER : (["0"-"9"])|(["0"-"9"])"."(["0"-"9"])|(["0"-"9"])"."|"."(["0"-"9"])>{System.out.println("Number -> " + image);}
     
 }
@@ -65,7 +63,9 @@ TOKEN : {
     <LBRACKET : "[">{System.out.println("Left bracket -> " + image);}|
     <RBRACKET : "]">{System.out.println("Right bracket -> " + image);}|
     <lBRACE : "{">{System.out.println("Left brace -> " + image);}|
+    <COMMA : ",">{System.out.println("Comma -> " + image);}|
     <RBRACE : "}">{System.out.println("Right brace -> " + image);}
+
 }
 TOKEN : {
     <PLUS : "+">{System.out.println("Plus -> " + image);}|
@@ -96,9 +96,7 @@ void Input() :
 {
 }
 {
-    <DEF>
-    <IDENTIFIER>
-    <COLON>
+    <DEF><IDENTIFIER><COLON>"\n"
     Code()
     <END>
     <EOF> 
@@ -106,48 +104,64 @@ void Input() :
 void Code() :
 {}
 {
+    (
+    VariableNormal()|
+    VariableOperacion()|
+    VariableTexto()|
     Sentencias()
+    )+
+}
+void VariableNormal() :
+{}
+{   
+    //suma = 13 o suma = numero
+    <IDENTIFIER><ASIGNACION>(<NUMBER>|<IDENTIFIER>)+"\n"
+}
+void VariableOperacion() :
+{}
+{
+    //suma = a + b 
+    <IDENTIFIER><ASIGNACION>(<NUMBER>|<IDENTIFIER>)+((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)+(<NUMBER>|<IDENTIFIER>)+)+"\n"
+}
+void VariableTexto() :
+{}
+{
+    //palabra = "texto"
+    <IDENTIFIER><ASIGNACION><DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)*<DOUBLECOMMA>"\n"
 }
 void Sentencias() :
 {}
 {
-    
-    Variables()|
-    SentenciaIf()
-    //SentenciaFor()|
-    //SentenciaWhile()|
-    //SentenciaSwitch()|
-    //Imprimir()
-    
-}
-void Variables() :
-{}
-{
     (
-    //int ads
-    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER>|
-    //int ads = 4 || int b = a
-    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER><ASIGNACION><IDENTIFIER>|<NUMBER>|
-    //String cadena = "aver je"
-    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER><ASIGNACION><DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)<DOUBLECOMMA>
-    //int suma = a + b || int op = a + b - c * x + 5
-    (<INT>|<DECIMAL>|<STRING>|<BOOLEAN>)<IDENTIFIER><ASIGNACION>((<IDENTIFIER>|<NUMBER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<IDENTIFIER>|<NUMBER>))*
-    )*
+        SentenciaIf()|
+        //SentenciaFor()|
+        //SentenciaWhile()|
+        SentenciaSwitch()
+        //Imprimir()
+    )+
 }
 void SentenciaIf() :
 {}
 {
     <IF>Comparacion()<COLON>
-        Sentencias()
+        Code()
     <END>
 }
 void Comparacion() : 
 {}
 {
     //if true
-    <IDENTIFIER>|
+    <IDENTIFIER>/*|
     //if a < b
     <IDENTIFIER>(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>)<IDENTIFIER>|
     //if a not b or a < b
     (<IDENTIFIER>(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>)<IDENTIFIER>(<OR>|<AND>|<NOT>)Comparacion())*
+    */
 }
+//Sintaxis de la sentencia del metodo Switch
+void  SentenciaSwitch() :
+{}
+{
+    <SWITCH><LPAREN><IDENTIFIER><RPAREN><lBRACE>(<CASE>(<IDENTIFIER>|<NUMBER>)<COLON>(Sentencias())+ <BREAK>)+[<DEFAULT_CASE><COLON>(Sentencias())<BREAK>]<RBRACE>
+}
+

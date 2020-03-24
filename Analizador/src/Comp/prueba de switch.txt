@@ -1,0 +1,9 @@
+def function :
+    contador = 0
+    switch (contador){
+       case 1:
+                    breack
+       case 2:
+                    breack
+   }
+end
