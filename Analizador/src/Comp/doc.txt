@@ -1,4 +1,5 @@
 def function :
-    op = "Nombre"
-    contador = 3 + 1
+    suma = a 
+    suma = 3 + 1
+    suma = a + b / 3 * operacion
 end

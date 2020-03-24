@@ -1,5 +1,6 @@
 options {
-	LOOKAHEAD = 2;
+	LOOKAHEAD = 4;
+    FORCE_LA_CHECK = true;
 }
 PARSER_BEGIN(analizador)
 
@@ -22,7 +23,7 @@ SKIP :
 {
     " " |
     "\t" |
-    "\n" |
+    //"\n" |
     "\r" |
     "\r\n"
 
@@ -50,9 +51,9 @@ TOKEN : {
     <DOUBLECOMMA: "\"">{System.out.println("Double comma -> " + image);}| 
     <NOTEQ : "!=">{System.out.println("Not equal -> " + image);}
 }
-//Tipos de datos
 TOKEN : {
-    <IDENTIFIER : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])*>{System.out.println("Identifier -> " + image);}|
+    <#CHAR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])*>|
+    <IDENTIFIER : (<CHAR>)*>{System.out.println("Identifier -> " + image);}|
     <NUMBER : (["0"-"9"])|(["0"-"9"])"."(["0"-"9"])|(["0"-"9"])"."|"."(["0"-"9"])>{System.out.println("Number -> " + image);}
     
 }
@@ -95,9 +96,7 @@ void Input() :
 {
 }
 {
-    <DEF>
-    <IDENTIFIER>
-    <COLON>
+    <DEF><IDENTIFIER><COLON>"\n"
     Code()
     <END>
     <EOF> 
@@ -105,37 +104,41 @@ void Input() :
 void Code() :
 {}
 {
-    Variables()|
+    (
+    VariableNormal()|
+    VariableOperacion()|
+    VariableTexto()|
     Sentencias()
+    )+
 }
-/*void TipoDato() :
+void VariableNormal() :
+{}
+{   
+    //suma = 13 o suma = numero
+    <IDENTIFIER><ASIGNACION>(<NUMBER>|<IDENTIFIER>)+"\n"
+}
+void VariableOperacion() :
 {}
 {
-    <INT>|
-    <DECIMAL>|
-    <STRING>|
-    <BOOLEAN>
-}*/
-void Variables() :
+    //suma = a + b 
+    <IDENTIFIER><ASIGNACION>(<NUMBER>|<IDENTIFIER>)+((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)+(<NUMBER>|<IDENTIFIER>)+)+"\n"
+}
+void VariableTexto() :
 {}
 {
-        
-        (<IDENTIFIER><ASIGNACION>((<IDENTIFIER>|<NUMBER>)|(<DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)<DOUBLECOMMA>))|
-        (<IDENTIFIER>|<NUMBER>)*(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<IDENTIFIER>|<NUMBER>)*)Code()
-        //int suma = a + b || int op = a + b - c * x + 5
-        //<IDENTIFIER><ASIGNACION>((<IDENTIFIER>|<NUMBER>)*(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<IDENTIFIER>|<NUMBER>)*)*Code() 
-        
+    //palabra = "texto"
+    <IDENTIFIER><ASIGNACION><DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)*<DOUBLECOMMA>"\n"
 }
 void Sentencias() :
 {}
 {
-    
+    (
         SentenciaIf()|
         //SentenciaFor()|
         //SentenciaWhile()|
         SentenciaSwitch()
         //Imprimir()
-    
+    )+
 }
 void SentenciaIf() :
 {}
@@ -148,11 +151,12 @@ void Comparacion() :
 {}
 {
     //if true
-    <IDENTIFIER>|
+    <IDENTIFIER>/*|
     //if a < b
     <IDENTIFIER>(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>)<IDENTIFIER>|
     //if a not b or a < b
     (<IDENTIFIER>(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>)<IDENTIFIER>(<OR>|<AND>|<NOT>)Comparacion())*
+    */
 }
 //Sintaxis de la sentencia del metodo Switch
 void  SentenciaSwitch() :
