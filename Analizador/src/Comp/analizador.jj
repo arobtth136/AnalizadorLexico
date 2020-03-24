@@ -28,9 +28,27 @@ SKIP :
 }
 TOKEN : {
     <DEF : "def">{System.out.println("Main function -> " + image);}|
-    <END : "end">{System.out.println("end -> " + image);}
+    <END : "end">{System.out.println("end -> " + image);}|
+    <EOL : "\n">{System.out.println("Salto de linea -> " + image);}
 }
-
+//Sentencias
+TOKEN : {
+    <IF : "if">{System.out.println("if -> " + image);}|
+    <ELSE : "else">{System.out.println("else -> " + image); }|
+    <ELSE_IF : "else if">{System.out.println("else if ->" + image); }|
+    <BREAK : "break">{System.out.println("break -> " + image);}|
+    <SWITCH : "switch">{System.out.println("switch -> " + image);}|
+    <CASE : "case">{System.out.println("case -> " + image);}|
+    <DEFAULT_CASE : "default">{System.out.println("default -> " + image);}|
+    <PRINT : "print">{System.out.println("print -> " + image);}|
+    <INPUT : "input">{System.out.println("input -> " + image);}
+}
+//Ciclos
+TOKEN : {
+    <WHILE : "while">{System.out.println("while -> " + image);}|
+    <FOR : "for">{System.out.println("for -> " + image);}
+}
+//Operadores
 TOKEN : {
     <ASIGNACION : "=">{System.out.println("Asignacion -> " + image);}|
     <PLUS_EQ : "+=">{System.out.println("Plus equal -> " + image);}|
@@ -72,30 +90,16 @@ TOKEN : {
     <INCR : "++">{System.out.println("Increment -> " + image);}|
     <DECR : "--">{System.out.println("Decrement -> " + image);}
 }
-//Sentencias
-TOKEN : {
-    <IF : "if">{System.out.println("if -> " + image);}|
-    <ELSE : "else">{System.out.println("else -> " + image); }|
-    <ELSE_IF : "else if">{System.out.println("else if ->" + image); }|
-    <BREAK : "break">{System.out.println("break -> " + image);}|
-    <SWITCH : "switch">{System.out.println("switch -> " + image);}|
-    <CASE : "case">{System.out.println("case -> " + image);}|
-    <DEFAULT_CASE : "default">{System.out.println("default -> " + image);}|
-    <PRINT : "print">{System.out.println("print -> " + image);}|
-    <INPUT : "input">{System.out.println("input -> " + image);}
-}
-//Ciclos
-TOKEN : {
-    <WHILE : "while">{System.out.println("while -> " + image);}|
-    <FOR : "for">{System.out.println("for -> " + image);}
-}
+
 void Input() :
 {
 }
 {
-    <DEF><IDENTIFIER><COLON>"\n"
+    (
+    <DEF><IDENTIFIER><COLON><EOL>
     Code()
-    <END>
+    <END>[<EOL>]
+    )+
     <EOF> 
 }
 void Code() :
@@ -112,19 +116,19 @@ void VariableNormal() :
 {}
 {   
     //suma = 13 o suma = numero
-    <IDENTIFIER><ASIGNACION>(<NUMBER>|<IDENTIFIER>)+"\n"
+    <IDENTIFIER><ASIGNACION>(<NUMBER>|<IDENTIFIER>)+<EOL>
 }
 void VariableOperacion() :
 {}
 {
     //suma = a + b 
-    <IDENTIFIER><ASIGNACION>(<NUMBER>|<IDENTIFIER>)+((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)+(<NUMBER>|<IDENTIFIER>)+)+"\n"
+    <IDENTIFIER><ASIGNACION>(<NUMBER>|<IDENTIFIER>)+((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)+(<NUMBER>|<IDENTIFIER>)+)+<EOL>
 }
 void VariableTexto() :
 {}
 {
     //palabra = "texto"
-    <IDENTIFIER><ASIGNACION><DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)*<DOUBLECOMMA>"\n"
+    <IDENTIFIER><ASIGNACION><DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)*<DOUBLECOMMA><EOL>
 }
 void Sentencias() :
 {}
@@ -159,13 +163,12 @@ void Comparacion() :
 void  SentenciaSwitch() :
 {}
 {
-    <SWITCH><LPAREN><IDENTIFIER><RPAREN><lBRACE>
-    (<CASE>(<IDENTIFIER>|<NUMBER>)<COLON>
-    (Sentencias())+ 
-    <BREAK>)+
-    [<DEFAULT_CASE><COLON>
-    (Sentencias())
-    <BREAK>]
-    <RBRACE>
+    <SWITCH><LPAREN><IDENTIFIER><RPAREN><lBRACE><EOL>
+    (<CASE>(<IDENTIFIER>|<NUMBER>)<COLON><EOL>
+    Code() 
+    <BREAK>)+<EOL>
+    [<DEFAULT_CASE><COLON><EOL>
+    (Code())
+    <BREAK><EOL>]
+    <RBRACE><EOL>
 }
-
