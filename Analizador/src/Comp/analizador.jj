@@ -1,6 +1,5 @@
 options {
 	LOOKAHEAD = 4;
-    FORCE_LA_CHECK = true;
 }
 PARSER_BEGIN(analizador)
 
@@ -23,7 +22,6 @@ SKIP :
 {
     " " |
     "\t" |
-    //"\n" |
     "\r" |
     "\r\n"
 
@@ -53,7 +51,7 @@ TOKEN : {
 }
 TOKEN : {
     <#CHAR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])*>|
-    <IDENTIFIER : (<CHAR>)*>{System.out.println("Identifier -> " + image);}|
+    <IDENTIFIER : (<CHAR>)+>{System.out.println("Texto -> " + image);}|
     <NUMBER : (["0"-"9"])|(["0"-"9"])"."(["0"-"9"])|(["0"-"9"])"."|"."(["0"-"9"])>{System.out.println("Number -> " + image);}
     
 }
@@ -65,7 +63,6 @@ TOKEN : {
     <lBRACE : "{">{System.out.println("Left brace -> " + image);}|
     <COMMA : ",">{System.out.println("Comma -> " + image);}|
     <RBRACE : "}">{System.out.println("Right brace -> " + image);}
-
 }
 TOKEN : {
     <PLUS : "+">{System.out.println("Plus -> " + image);}|
@@ -162,6 +159,13 @@ void Comparacion() :
 void  SentenciaSwitch() :
 {}
 {
-    <SWITCH><LPAREN><IDENTIFIER><RPAREN><lBRACE>(<CASE>(<IDENTIFIER>|<NUMBER>)<COLON>(Sentencias())+ <BREAK>)+[<DEFAULT_CASE><COLON>(Sentencias())<BREAK>]<RBRACE>
+    <SWITCH><LPAREN><IDENTIFIER><RPAREN><lBRACE>
+    (<CASE>(<IDENTIFIER>|<NUMBER>)<COLON>
+    (Sentencias())+ 
+    <BREAK>)+
+    [<DEFAULT_CASE><COLON>
+    (Sentencias())
+    <BREAK>]
+    <RBRACE>
 }
 
