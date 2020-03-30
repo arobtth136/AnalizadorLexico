@@ -42,7 +42,7 @@ TOKEN : {
     <CASE : "case">{System.out.println("case -> " + image);}|
     <DEFAULT_CASE : "default">{System.out.println("default -> " + image);}|
     <PRINT : "print">{System.out.println("print -> " + image);}|
-    <INPUT : "input">{System.out.println("input -> " + image);}
+    <INPUT : "input">{System.out.println("input -> " + image);}|
     <IN : "in">{System.out.println("in -> " + image);}
 }
 //Ciclos
@@ -53,6 +53,7 @@ TOKEN : {
 //Operadores
 TOKEN : {
     <ASIGNACION : "=">{System.out.println("Asignacion -> " + image);}|
+    <CONCATENACION : "&">{System.out.println("Concatenacion -> " + image);}|
     <PLUS_EQ : "+=">{System.out.println("Plus equal -> " + image);}|
     <MINUS_EQ : "-=">{System.out.println("Minus equal -> " + image);}|
     <TIMES_EQ : "*=">{System.out.println("Times equal -> " + image);}|
@@ -95,16 +96,18 @@ TOKEN : {
     <DECR : "--">{System.out.println("Decrement -> " + image);}
 }
 
-void Print()
-{}
+void Print() :
+{   
+}
 {
-    <PRINT><LPAREN>Imprimible()[&Imprimible()]<RPAREN>
+    <PRINT><LPAREN>Imprimible()[<CONCATENACION>Imprimible()]<RPAREN>
 }
 
-void Imprimible()
-{}
+void Imprimible() :
 {
-    <IDENTIFIER>|<DOUBLECOMMA><CHAR>*<DOUBLECOMMA>
+}
+{
+    <IDENTIFIER>|<DOUBLECOMMA>(<IDENTIFIER>)*<DOUBLECOMMA>
 }
 
 void Input() :
@@ -206,8 +209,9 @@ void operacion() :
     <LPAREN>((<NUMBER>)+(<TIMES>|<PLUS>|<MINUS>|<DIVIDE>)[operacion()])<RPAREN>
 }
 void SentenciaFor() :
+{}
 {
         //for i | for numero in [0 1 2 3 4] | in ("hola") | in ["mike jorge 29"]
-	<FOR><IDENTIFIER><IN>(<LPAREN>|<LBRACKET>)([<DOUBLECOMMA>]<IDENTIFIER>[<DOUBLECOMMA>]|<NUMBER>)(<RPARENT>|<RBRACKET>)<COLON>
-   <END>
+	//<FOR><IDENTIFIER><IN>(<LPAREN>|<LBRACKET>)([<DOUBLECOMMA>]<IDENTIFIER>[<DOUBLECOMMA>]|<NUMBER>)(<RPARENT>|<RBRACKET>)<COLON><EOL>
+    <END>
 }
