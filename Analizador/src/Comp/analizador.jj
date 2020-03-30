@@ -42,6 +42,7 @@ TOKEN : {
     <DEFAULT_CASE : "default">{System.out.println("default -> " + image);}|
     <PRINT : "print">{System.out.println("print -> " + image);}|
     <INPUT : "input">{System.out.println("input -> " + image);}
+    <IN : "in">{System.out.println("in -> " + image);}
 }
 //Ciclos
 TOKEN : {
@@ -59,6 +60,8 @@ TOKEN : {
     <OR : "or">{System.out.println("or -> " + image);}|
     <NOT : "not">{System.out.println("not -> " + image);}|
     <EQ : "==">{System.out.println("Equal -> " + image);}|
+    <TRUE : "true">{System.out.println("Boolean -> " + image);}|
+    <FALSE : "false">{System.out.println("Boolean -> " + image);}|
     <COLON : ":">{System.out.println("Double colon -> " + image);}|
     <BIG : ">">{System.out.println("Biggest -> " + image);}|
     <BIGEQ : ">=">{System.out.println("Biggest equal -> " + image);}|
@@ -128,7 +131,7 @@ void VariableNormal() :
 {}
 {   
     //suma = 13 o suma = numero
-    <IDENTIFIER><ASIGNACION>(<NUMBER>|<IDENTIFIER>)+<EOL>
+    <IDENTIFIER><ASIGNACION>((<NUMBER>)+|<IDENTIFIER>)<EOL>
 }
 void VariableOperacion() :
 {}
@@ -147,7 +150,7 @@ void Sentencias() :
 {
     (
         SentenciaIf()|
-        //SentenciaFor()|
+        SentenciaFor()|
         //SentenciaWhile()|
         SentenciaSwitch()
         //Imprimir()
@@ -156,20 +159,19 @@ void Sentencias() :
 void SentenciaIf() :
 {}
 {
-    <IF>Comparacion()<COLON>
+    <IF>Comparacion()<EOL>
         Code()
-    <END>
+    <END><EOL>
 }
 void Comparacion() : 
 {}
 {
     //if true
-    <IDENTIFIER>/*|
-    //if a < b
-    <IDENTIFIER>(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>)<IDENTIFIER>|
+    (<TRUE>|<FALSE>)<COLON>|
+    //if a < b || if a < 3 || 3 > a
+    ((<NUMBER>)+|<TRUE>|<FALSE>|<IDENTIFIER>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>|<EQ>)(<TRUE>|<FALSE>|<IDENTIFIER>|(<NUMBER>)+)<COLON>|
     //if a not b or a < b
-    (<IDENTIFIER>(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>)<IDENTIFIER>(<OR>|<AND>|<NOT>)Comparacion())*
-    */
+    (((<NUMBER>)+|<TRUE>|<FALSE>|<IDENTIFIER>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>)((<NUMBER>)+|<TRUE>|<FALSE>|<IDENTIFIER>)[(<OR>|<AND>)])+<COLON>
 }
 //Sintaxis de la sentencia del metodo Switch
 void  SentenciaSwitch() :
@@ -183,4 +185,10 @@ void  SentenciaSwitch() :
     (Code())
     <BREAK><EOL>]
     <RBRACE><EOL>
+}
+void SentenciaFor() :
+{
+        //for i | for numero in [0 1 2 3 4] | in ("hola") | in ["mike jorge 29"]
+	<FOR><IDENTIFIER><IN>(<LPAREN>|<LBRACKET>)([<DOUBLECOMMA>]<IDENTIFIER>[<DOUBLECOMMA>]|<NUMBER>)(<RPARENT>|<RBRACKET>)<COLON>
+   <END>
 }
