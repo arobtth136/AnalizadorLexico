@@ -94,6 +94,18 @@ TOKEN : {
     <DECR : "--">{System.out.println("Decrement -> " + image);}
 }
 
+void Print()
+{}
+{
+    <PRINT><LPAREN>Imprimible()[&Imprimible()]<RPAREN>
+}
+
+void Imprimible()
+{}
+{
+    <IDENTIFIER>|<DOUBLECOMMA><CHAR>*<DOUBLECOMMA>
+}
+
 void Input() :
 {
 }
