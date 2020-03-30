@@ -29,6 +29,7 @@ SKIP :
 TOKEN : {
     <DEF : "def">{System.out.println("Main function -> " + image);}|
     <END : "end">{System.out.println("end -> " + image);}|
+    <RETURN : "retrun">{{System.out.println("return -> " + image);}}|
     <EOL : "\n">{System.out.println("Salto de linea -> " + image);}
 }
 //Sentencias
@@ -100,6 +101,7 @@ void Input() :
     (
     <DEF><IDENTIFIER><COLON><EOL>
     Code()
+    [Return()]
     <END>[<EOL>]
     )+
     <EOF> 
@@ -161,7 +163,7 @@ void Comparacion() :
     (((<NUMBER>)+|<TRUE>|<FALSE>|<IDENTIFIER>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>)((<NUMBER>)+|<TRUE>|<FALSE>|<IDENTIFIER>)[(<OR>|<AND>)])+<COLON>
 }
 //Sintaxis de la sentencia del metodo Switch
-void  SentenciaSwitch() :
+void SentenciaSwitch() :
 {}
 {
     <SWITCH><LPAREN><IDENTIFIER><RPAREN><lBRACE><EOL>
@@ -172,4 +174,22 @@ void  SentenciaSwitch() :
     (Code())
     <BREAK><EOL>]
     <RBRACE><EOL>
+}
+void Return() :
+{}
+{   
+    //return variable
+    <RETURN><IDENTIFIER><EOL>|
+    //return "texto"
+    <RETURN><DOUBLECOMMA><IDENTIFIER><DOUBLECOMMA><EOL>|
+    ===
+    //return 3 + 1 / 5
+    <RETURN>((<NUMBER>)+(<PLUS>|<TIMES>|<MINUS>|<DIVIDE>))+<EOL>|
+    //return (3+1) * var || var*(3+1)/4+(3+1)
+    <RETURN>operacion()<EOL>
+}
+void operacion() :
+{}
+{
+    <LPAREN>((<NUMBER>)+(<TIMES>|<PLUS>|<MINUS>|<DIVIDE>)[operacion()])<RPAREN>
 }
