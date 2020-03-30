@@ -43,6 +43,7 @@ TOKEN : {
     <DEFAULT_CASE : "default">{System.out.println("default -> " + image);}|
     <PRINT : "print">{System.out.println("print -> " + image);}|
     <INPUT : "input">{System.out.println("input -> " + image);}
+    <IN : "in">{System.out.println("in -> " + image);}
 }
 //Ciclos
 TOKEN : {
@@ -94,6 +95,18 @@ TOKEN : {
     <DECR : "--">{System.out.println("Decrement -> " + image);}
 }
 
+void Print()
+{}
+{
+    <PRINT><LPAREN>Imprimible()[&Imprimible()]<RPAREN>
+}
+
+void Imprimible()
+{}
+{
+    <IDENTIFIER>|<DOUBLECOMMA><CHAR>*<DOUBLECOMMA>
+}
+
 void Input() :
 {
 }
@@ -139,7 +152,7 @@ void Sentencias() :
 {
     (
         SentenciaIf()|
-        //SentenciaFor()|
+        SentenciaFor()|
         //SentenciaWhile()|
         SentenciaSwitch()
         //Imprimir()
@@ -182,7 +195,6 @@ void Return() :
     <RETURN><IDENTIFIER><EOL>|
     //return "texto"
     <RETURN><DOUBLECOMMA><IDENTIFIER><DOUBLECOMMA><EOL>|
-    ===
     //return 3 + 1 / 5
     <RETURN>((<NUMBER>)+(<PLUS>|<TIMES>|<MINUS>|<DIVIDE>))+<EOL>|
     //return (3+1) * var || var*(3+1)/4+(3+1)
