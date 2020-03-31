@@ -212,6 +212,7 @@ void SentenciaFor() :
 {}
 {
         //for i | for numero in [0 1 2 3 4] | in ("hola") | in ["mike jorge 29"]
-	//<FOR><IDENTIFIER><IN>(<LPAREN>|<LBRACKET>)([<DOUBLECOMMA>]<IDENTIFIER>[<DOUBLECOMMA>]|<NUMBER>)(<RPARENT>|<RBRACKET>)<COLON><EOL>
+	<FOR><IDENTIFIER><IN>(<LPAREN>|<LBRACKET>)([<DOUBLECOMMA>](<IDENTIFIER>)*[<DOUBLECOMMA>]|(<NUMBER>)*)(<RPAREN>|<RBRACKET>)<COLON><EOL>
+        Code()
     <END>
 }
