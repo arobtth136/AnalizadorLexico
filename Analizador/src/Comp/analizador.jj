@@ -7,7 +7,7 @@ public class analizador {
     public static void main(String[] args) throws ParseException, Exception{
 	try {
 	    analizador parser = new analizador(System.in);
-	    parser.Input();
+	    parser.Programa();
         System.out.println("El analizador ha terminado sin errores");
 	} catch (ParseException e) {
 	    System.out.println(e.getMessage());
@@ -100,7 +100,7 @@ void Print() :
 {   
 }
 {
-    <PRINT><LPAREN>Imprimible()[<CONCATENACION>Imprimible()]<RPAREN>
+    <PRINT><LPAREN>Imprimible()[<CONCATENACION>Imprimible()]<RPAREN><EOL>
 }
 
 void Imprimible() :
@@ -110,17 +110,17 @@ void Imprimible() :
     <IDENTIFIER>|<DOUBLECOMMA>(<IDENTIFIER>)*<DOUBLECOMMA>
 }
 
-void Input() :
+void Programa() :
 {
 }
 {
-    (
+    
     <DEF><IDENTIFIER><COLON><EOL>
     Code()
     [Return()]
-    <END>[<EOL>]
-    )+
-    <EOF> 
+    <END><EOL>
+    [Programa()]
+    <EOF>
 }
 void Code() :
 {}
@@ -157,8 +157,8 @@ void Sentencias() :
         SentenciaIf()|
         SentenciaFor()|
         //SentenciaWhile()|
-        SentenciaSwitch()
-        //Imprimir()
+        SentenciaSwitch()|
+        Print()
     )+
 }
 void SentenciaIf() :
