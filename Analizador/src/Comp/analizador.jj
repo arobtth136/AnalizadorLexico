@@ -95,7 +95,18 @@ TOKEN : {
     <INCR : "++">{System.out.println("Increment -> " + image);}|
     <DECR : "--">{System.out.println("Decrement -> " + image);}
 }
-
+void Input() :
+{
+}
+{
+    (
+    <DEF><IDENTIFIER><COLON><EOL>
+    Code()
+    [Return()]
+    <END>[<EOL>]
+    )+
+    <EOF> 
+}
 void Print() :
 {   
 }
@@ -110,18 +121,7 @@ void Imprimible() :
     <IDENTIFIER>|<DOUBLECOMMA>(<IDENTIFIER>)*<DOUBLECOMMA>
 }
 
-void Input() :
-{
-}
-{
-    (
-    <DEF><IDENTIFIER><COLON><EOL>
-    Code()
-    [Return()]
-    <END>[<EOL>]
-    )+
-    <EOF> 
-}
+
 void Code() :
 {}
 {
@@ -157,8 +157,8 @@ void Sentencias() :
         SentenciaIf()|
         SentenciaFor()|
         //SentenciaWhile()|
-        SentenciaSwitch()
-        //Imprimir()
+        SentenciaSwitch()|
+        Print()
     )+
 }
 void SentenciaIf() :
