@@ -43,6 +43,7 @@ TOKEN : {
     <DEFAULT_CASE : "default">{System.out.println("default -> " + image);}|
     <PRINT : "print">{System.out.println("print -> " + image);}|
     <INPUT : "input">{System.out.println("input -> " + image);}|
+    <ARRAY : "array">{System.out.println("array -> " + image);}|
     <IN : "in">{System.out.println("in -> " + image);}
 }
 //Ciclos
@@ -154,9 +155,11 @@ void Sentencias() :
 {}
 {
     (
+       
         SentenciaIf()|
         SentenciaFor()|
         //SentenciaWhile()|
+         declaracionArreglo()|
         SentenciaSwitch()|
         Print()
     )+
@@ -231,4 +234,10 @@ void SentenciaFor() :
 	<FOR><IDENTIFIER><IN>(<LPAREN>|<LBRACKET>)([<DOUBLECOMMA>](<IDENTIFIER>)*[<DOUBLECOMMA>]|(<NUMBER>)*)(<RPAREN>|<RBRACKET>)<COLON><EOL>
         Code()
     <END><EOL>
+}
+void declaracionArreglo() :
+{}{
+     //array   (      [        E,ER,,Y,YT | 1,3,4,5,          )        ]
+   <ARRAY><LPAREN><LBRACKET>(<NUMBER>|(<COMMA><NUMBER>))*<RBRACKET><RPAREN><EOL>
+
 }
