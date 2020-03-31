@@ -111,7 +111,7 @@ void Print() :
 {   
 }
 {
-    <PRINT><LPAREN>Imprimible()[<CONCATENACION>Imprimible()]<RPAREN>
+    <PRINT><LPAREN>Imprimible()[<CONCATENACION>Imprimible()]<RPAREN><EOL>
 }
 
 void Imprimible() :
@@ -185,7 +185,7 @@ void SentenciaSwitch() :
     <SWITCH><LPAREN><IDENTIFIER><RPAREN><lBRACE><EOL>
     (<CASE>(<IDENTIFIER>|<NUMBER>)<COLON><EOL>
     Code() 
-    <BREAK>)+<EOL>
+    <BREAK><EOL>)+
     [<DEFAULT_CASE><COLON><EOL>
     (Code())
     <BREAK><EOL>]
