@@ -74,7 +74,7 @@ TOKEN : {
 }
 TOKEN : {
     <#CHAR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])*>|
-    <IDENTIFIER : (<CHAR>)+>{System.out.println("Texto -> " + image);}|
+    <IDENTIFIER : (<CHAR>)+>|
     <NUMBER : (["0"-"9"])|(["0"-"9"])"."(["0"-"9"])|(["0"-"9"])"."|"."(["0"-"9"])>{System.out.println("Number -> " + image);}
     
 }
@@ -214,5 +214,5 @@ void SentenciaFor() :
         //for i | for numero in [0 1 2 3 4] | in ("hola") | in ["mike jorge 29"]
 	<FOR><IDENTIFIER><IN>(<LPAREN>|<LBRACKET>)([<DOUBLECOMMA>](<IDENTIFIER>)*[<DOUBLECOMMA>]|(<NUMBER>)*)(<RPAREN>|<RBRACKET>)<COLON><EOL>
         Code()
-    <END>
+    <END><EOL>
 }
