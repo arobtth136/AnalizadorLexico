@@ -1,4 +1,4 @@
-def function :
+def isOdd :
     suma = a 
     suma = 3 + 1
     suma = a + b / 3 * operacion

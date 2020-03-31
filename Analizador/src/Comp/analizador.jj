@@ -36,7 +36,7 @@ TOKEN : {
 TOKEN : {
     <IF : "if">{System.out.println("if -> " + image);}|
     <ELSE : "else">{System.out.println("else -> " + image); }|
-    <ELSE_IF : "else if">{System.out.println("else if ->" + image); }|
+    <ELIF : "elif">{System.out.println("else if ->" + image); }|
     <BREAK : "break">{System.out.println("break -> " + image);}|
     <SWITCH : "switch">{System.out.println("switch -> " + image);}|
     <CASE : "case">{System.out.println("case -> " + image);}|
@@ -166,6 +166,7 @@ void SentenciaIf() :
 {
     <IF>Comparacion()<EOL>
         Code()
+    [Else()|Elif()]
     <END><EOL>
 }
 void Comparacion() : 
@@ -177,6 +178,21 @@ void Comparacion() :
     ((<NUMBER>)+|<TRUE>|<FALSE>|<IDENTIFIER>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>|<EQ>)(<TRUE>|<FALSE>|<IDENTIFIER>|(<NUMBER>)+)<COLON>|
     //if a not b or a < b
     (((<NUMBER>)+|<TRUE>|<FALSE>|<IDENTIFIER>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>)((<NUMBER>)+|<TRUE>|<FALSE>|<IDENTIFIER>)[(<OR>|<AND>)])+<COLON>
+}
+void Else() :
+{}
+{
+    <ELSE><COLON><EOL>
+        Code()
+}
+
+void Elif() :
+{}
+{
+    (
+    <ELIF>Comparacion()<EOL>
+        Code()
+    )+
 }
 //Sintaxis de la sentencia del metodo Switch
 void SentenciaSwitch() :
