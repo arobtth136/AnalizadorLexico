@@ -75,7 +75,7 @@ TOKEN : {
 TOKEN : {
     <#CHAR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])*>|
     <IDENTIFIER : (<CHAR>)+>|
-    <NUMBER : (["0"-"9"])|(["0"-"9"])"."(["0"-"9"])|(["0"-"9"])"."|"."(["0"-"9"])>{System.out.println("Number -> " + image);}
+    <NUMBER : (["0"-"9"])+|(["0"-"9"])+"."(["0"-"9"])+|(["0"-"9"])+"."|"."(["0"-"9"])+>{System.out.println("Number -> " + image);}
     
 }
 TOKEN : {
@@ -132,22 +132,25 @@ void Code() :
     )+
 }
 void VariableNormal() :
-{}
+{Token t;}
 {   
     //suma = 13 o suma = numero
-    <IDENTIFIER><ASIGNACION>((<NUMBER>)+|<IDENTIFIER>)<EOL>
+    t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);}<ASIGNACION>(<NUMBER>|<IDENTIFIER>)<EOL>
 }
 void VariableOperacion() :
-{}
+{Token t;}
 {
     //suma = a + b 
-    <IDENTIFIER><ASIGNACION>(<NUMBER>|<IDENTIFIER>)+((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)+(<NUMBER>|<IDENTIFIER>)+)+<EOL>
+    t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);}
+    <ASIGNACION>
+    (<NUMBER>|t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);})
+    ((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);}))+<EOL>
 }
 void VariableTexto() :
-{}
+{Token t;}
 {
     //palabra = "texto"
-    <IDENTIFIER><ASIGNACION><DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)*<DOUBLECOMMA><EOL>
+    t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);}<ASIGNACION><DOUBLECOMMA>(t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);}|<NUMBER>)*<DOUBLECOMMA><EOL>
 }
 void Sentencias() :
 {}
