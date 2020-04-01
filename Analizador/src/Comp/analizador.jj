@@ -23,13 +23,14 @@ SKIP :
     " " |
     "\t" |
     "\r" |
-    "\r\n"
+    "\n"
 
 }
 TOKEN : {
-    <DEF : "def">{System.out.println("Main function -> " + image);}|
+    <DEF : "def">{System.out.println("Definicion de funcion -> " + image);}|
     <END : "end">{System.out.println("end -> " + image);}|
-   <EOL : "\n">{System.out.println("Salto de linea -> " + image);}
+    <RETURN : "retrun">{{System.out.println("return -> " + image);}}|
+    <EOL : "\r\n">
 }
 //Sentencias
 TOKEN : {
@@ -99,11 +100,10 @@ TOKEN : {
     <DECR : "--">{System.out.println("Decrement -> " + image);}
 }
 void Input() :
-{
-}
+{Token t;}
 {
     (
-    <DEF><IDENTIFIER><COLON><EOL>
+    <DEF>(t = <IDENTIFIER>{System.out.println("Nombre de funcion -> " + t.image);})<COLON><EOL>
     Code()
     [Return()]
     <END>[<EOL>]
