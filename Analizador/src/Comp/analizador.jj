@@ -155,7 +155,7 @@ void VariableTexto() :
 {Token t;}
 {
     //palabra = "texto"
-    t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);}<ASIGNACION><DOUBLECOMMA>(t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);}|<NUMBER>)*<DOUBLECOMMA><EOL>
+    t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);}<ASIGNACION><DOUBLECOMMA>(t = <IDENTIFIER>{System.out.println("Cadena de texto -> " + t.image);}|<NUMBER>)*<DOUBLECOMMA><EOL>
 }
 void variableArray() :
 {}
