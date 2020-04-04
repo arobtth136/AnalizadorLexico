@@ -69,7 +69,7 @@ TOKEN : {
     <LESSEQ : "<=">{System.out.println("Minus equal -> " + image);}|
     <NOTEQ : "!=">{System.out.println("Not equal -> " + image);}
 }
-//Tipos de datos
+//Caracteres
 TOKEN : {
     <#CHAR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])*>|
     <IDENTIFIER : (<CHAR>)+>|
@@ -102,12 +102,17 @@ void Input() :
 {Token t;}
 {
     (
-    <DEF>(t = <IDENTIFIER>{System.out.println("Nombre de funcion -> " + t.image);})<COLON><EOL>
+    <DEF>(t = <IDENTIFIER>{System.out.println("Nombre de funcion -> " + t.image);})[<LPAREN>Args()]<COLON><EOL>
     Code()
     [Return()]
     <END>[<EOL>]
     )+
     <EOF> 
+}
+void Args() :
+{}
+{
+    <IDENTIFIER>[(<COMMA><IDENTIFIER>)+]<RPAREN>
 }
 void Print() :
 {   
@@ -218,14 +223,14 @@ void Elif() :
 void SentenciaSwitch() :
 {}
 {
-    <SWITCH><LPAREN><IDENTIFIER><RPAREN><lBRACE><EOL>
+    <SWITCH><LPAREN><IDENTIFIER><RPAREN><COLON><EOL>
     (<CASE>(<IDENTIFIER>|<NUMBER>)<COLON><EOL>
     Code() 
     <BREAK><EOL>)+
     [<DEFAULT_CASE><COLON><EOL>
     (Code())
     <BREAK><EOL>]
-    <RBRACE><EOL>
+    <EOL>
 }
 void Return() :
 {}
@@ -233,16 +238,17 @@ void Return() :
     //return variable
     <RETURN><IDENTIFIER><EOL>|
     //return "texto"
-    <RETURN><DOUBLECOMMA><IDENTIFIER><DOUBLECOMMA><EOL>|
+    <RETURN><DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)*<DOUBLECOMMA><EOL>|
     //return 3 + 1 / 5
-    <RETURN>((<NUMBER>)+(<PLUS>|<TIMES>|<MINUS>|<DIVIDE>))+<EOL>|
+    <RETURN>(<NUMBER>|<IDENTIFIER>)((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>))+<EOL>|
     //return (3+1) * var || var*(3+1)/4+(3+1)
     <RETURN>operacion()<EOL>
 }
 void operacion() :
 {}
 {
-    <LPAREN>((<NUMBER>)+(<TIMES>|<PLUS>|<MINUS>|<DIVIDE>)[operacion()])<RPAREN>
+    (<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())[(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion()]|
+    <LPAREN>(<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())[(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion()]<RPAREN>
 }
 void SentenciaFor() :
 {}
