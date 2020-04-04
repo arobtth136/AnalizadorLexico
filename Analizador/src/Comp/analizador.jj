@@ -40,7 +40,6 @@ TOKEN : {
     <BREAK : "break">{System.out.println("break -> " + image);}|
     <SWITCH : "switch">{System.out.println("switch -> " + image);}|
     <CASE : "case">{System.out.println("case -> " + image);}|
-    <RETURN : "return">{{System.out.println("return -> " + image);}}|
     <DEFAULT_CASE : "default">{System.out.println("default -> " + image);}|
     <PRINT : "print">{System.out.println("print -> " + image);}|
     <INPUT : "input">{System.out.println("input -> " + image);}|
@@ -195,7 +194,7 @@ void Comparacion() :
     //if true
     (<TRUE>|<FALSE>)<COLON>|
     //if a < b || if a < 3 || 3 > a
-    ((<NUMBER>)+|<TRUE>|<FALSE>|<IDENTIFIER>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>|<EQ>)(<TRUE>|<FALSE>|<IDENTIFIER>|(<NUMBER>)+)<COLON>|
+    ((<NUMBER>)|<TRUE>|<FALSE>|<IDENTIFIER>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>|<EQ>)(<TRUE>|<FALSE>|<IDENTIFIER>|<NUMBER>)<COLON>|
     //if a not b or a < b
     (((<NUMBER>)+|<TRUE>|<FALSE>|<IDENTIFIER>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>)((<NUMBER>)+|<TRUE>|<FALSE>|<IDENTIFIER>)[(<OR>|<AND>)])+<COLON>
 }
@@ -213,6 +212,7 @@ void Elif() :
     <ELIF>Comparacion()<EOL>
         Code()
     )+
+    [Else()]
 }
 //Sintaxis de la sentencia del metodo Switch
 void SentenciaSwitch() :
