@@ -10,5 +10,7 @@ def PruebaIf :
         mayor = b
     elif c < a:
         mayor = a
+    else:
+        mayor = a    
     end
 end
