@@ -40,7 +40,6 @@ TOKEN : {
     <BREAK : "break">{System.out.println("break -> " + image);}|
     <SWITCH : "switch">{System.out.println("switch -> " + image);}|
     <CASE : "case">{System.out.println("case -> " + image);}|
-    <RETURN : "return">{{System.out.println("return -> " + image);}}|
     <DEFAULT_CASE : "default">{System.out.println("default -> " + image);}|
     <PRINT : "print">{System.out.println("print -> " + image);}|
     <INPUT : "input">{System.out.println("input -> " + image);}|
