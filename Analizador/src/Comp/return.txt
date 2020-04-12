@@ -1,4 +1,9 @@
-def PruebaRetrun(a, b, c):
-    a = 3
-    retrun var*(3+1)/(4+(3+1))
+def isEven(number):
+    number = 1
+    retrun isOdd(number)
+end
+
+def isOdd(number):
+    number = 2
+    retrun isEven(number)
 end
