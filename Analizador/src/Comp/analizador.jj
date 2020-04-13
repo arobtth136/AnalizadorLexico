@@ -224,12 +224,8 @@ void SentenciaSwitch() :
 {
     <SWITCH><LPAREN><IDENTIFIER><RPAREN><COLON>(<EOL>|<EOLW>)
     (<CASE>(<IDENTIFIER>|<NUMBER>)<COLON>(<EOL>|<EOLW>)
-    Code() 
-    <BREAK>(<EOL>|<EOLW>))+
-    [<DEFAULT_CASE><COLON>(<EOL>|<EOLW>)
-    (Code())
-    <BREAK>(<EOL>|<EOLW>)]
-    (<EOL>|<EOLW>)
+    Code()<BREAK>(<EOL>|<EOLW>))+
+    ((<DEFAULT_CASE><COLON>(<EOL>|<EOLW>)Code()<BREAK>(<EOL>|<EOLW>)<END>(<EOL>|<EOLW>))|<END>(<EOL>|<EOLW>))
 }
 void Return() :
 {}
