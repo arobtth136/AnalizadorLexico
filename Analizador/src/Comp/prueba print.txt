@@ -1,0 +1,3 @@
+def function :
+	print ("Este es un texto je")
+end

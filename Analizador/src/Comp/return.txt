@@ -1,0 +1,9 @@
+def isEven(number):
+    number = 1
+    retrun isOdd(number)
+end
+
+def isOdd(number):
+    number = 2
+    retrun isEven(number)
+end
