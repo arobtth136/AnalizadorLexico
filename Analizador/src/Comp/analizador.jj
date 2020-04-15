@@ -137,6 +137,7 @@ void Code() :
     VariableNormal()|
     VariableOperacion()|
     VariableTexto()|
+    VariableEntrada()|
     Sentencias()
     )+
 }
@@ -161,6 +162,11 @@ void VariableTexto() :
     //palabra = "texto"
     t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);}<ASIGNACION><DOUBLECOMMA>(t = <IDENTIFIER>{System.out.println("Cadena de texto -> " + t.image);}|<NUMBER>)*<DOUBLECOMMA>(<EOL>|<EOLW>)
 }
+void VariableEntrada() :
+{}
+{
+    <IDENTIFIER><ASIGNACION>Entrada()
+}
 void variableArray() :
 {}
 {
@@ -172,12 +178,16 @@ void variableArray() :
    (<IDENTIFIER><LBRACKET><IDENTIFIER><RBRACKET>(<EOL>|<EOLW>))
 }
 
-
+void Entrada() :
+{}
+{
+    <INPUT><LPAREN>[<DOUBLECOMMA><IDENTIFIER><DOUBLECOMMA>]<RPAREN>(<EOL>|<EOLW>)
+}
 void Sentencias() :
 {}
 {
     (
-       
+        Entrada()|
         SentenciaIf()|
         SentenciaFor()|
         //SentenciaWhile()|
