@@ -4,5 +4,4 @@ def prueba:
  array = [1,a,2,c,3,true] 
  array[0] = 1
  array[i]
- 
 end
