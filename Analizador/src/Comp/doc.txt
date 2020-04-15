@@ -1,9 +1,3 @@
-def isOdd :
-    suma = a 
-    suma = 3 + 1
-    suma = a + b / 3 * operacion
-    cadena = "Pedroza puto"
-end
-def isEven :
-    suma = 23
+def  variables :
+    operacion = suma / 2 * (caca * 3 + (3 + 1))
 end

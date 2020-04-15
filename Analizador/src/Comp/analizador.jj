@@ -100,13 +100,14 @@ TOKEN : {
 void Input() :
 {Token t;}
 {
-    (
-    <DEF>(t = <IDENTIFIER>{System.out.println("Nombre de funcion -> " + t.image);})[<LPAREN>Args()]<COLON>(<EOL>|<EOLW>)
-    Code()
-    [Return()]
-    <END>[(<EOL>|<EOLW>)+]
-    )+
-    <EOF> 
+        (
+            <DEF>(t = <IDENTIFIER>{System.out.println("Nombre de funcion -> " + t.image);})[<LPAREN>Args()]<COLON>(<EOL>|<EOLW>)
+            Code()
+            [Return()]
+            <END>[(<EOL>|<EOLW>)+]
+        )+
+        <EOF>
+     
 }
 void Args() :
 {}
@@ -151,8 +152,8 @@ void VariableOperacion() :
     //suma = a + b 
     t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);}
     <ASIGNACION>
-    (<NUMBER>|t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);})
-    ((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);}))+(<EOL>|<EOLW>)
+    operacion()
+    (<EOL>|<EOLW>)
 }
 void VariableTexto() :
 {Token t;}
@@ -240,13 +241,17 @@ void Return() :
     <RETURN>operacion()(<EOL>|<EOLW>)|
     //return isOdd(number)
     <RETURN><IDENTIFIER><LPAREN><IDENTIFIER><RPAREN>(<EOL>|<EOLW>)
+    //return 3
+    <RETURN>(<NUMBER>|<IDENTIFIER>)(<EOL>|<EOLW>)
 }
 void operacion() :
 {}
 {
+    <LPAREN>(<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>)<RPAREN>[(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion()]|
     (<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())[((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion())+]|
     <LPAREN>(<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())[((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion())+]<RPAREN>|
     (<NUMBER>|<IDENTIFIER>)
+    
 }
 void SentenciaFor() :
 {}
