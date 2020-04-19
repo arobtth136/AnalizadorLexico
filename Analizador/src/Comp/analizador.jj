@@ -21,22 +21,21 @@ PARSER_END(analizador)
 SKIP :
 {
     " " |
-    "\t" |
-    "\r" |
-    "\r\n"
+    "\t"
 
 }
 TOKEN : {
-    <DEF : "def">{System.out.println("Main function -> " + image);}|
+    <DEF : "def">{System.out.println("Definicion de funcion -> " + image);}|
     <END : "end">{System.out.println("end -> " + image);}|
     <RETURN : "retrun">{{System.out.println("return -> " + image);}}|
-    <EOL : "\n">{System.out.println("Salto de linea -> " + image);}
+    <EOL : "\n">|
+    <EOLW: "\r\n">
 }
 //Sentencias
 TOKEN : {
     <IF : "if">{System.out.println("if -> " + image);}|
     <ELSE : "else">{System.out.println("else -> " + image); }|
-    <ELSE_IF : "else if">{System.out.println("else if ->" + image); }|
+    <ELIF : "elif">{System.out.println("else if ->" + image); }|
     <BREAK : "break">{System.out.println("break -> " + image);}|
     <SWITCH : "switch">{System.out.println("switch -> " + image);}|
     <CASE : "case">{System.out.println("case -> " + image);}|
@@ -52,7 +51,6 @@ TOKEN : {
 }
 //Operadores
 TOKEN : {
-    <ASIGNACION : "=">{System.out.println("Asignacion -> " + image);}|
     <CONCATENACION : "&">{System.out.println("Concatenacion -> " + image);}|
     <PLUS_EQ : "+=">{System.out.println("Plus equal -> " + image);}|
     <MINUS_EQ : "-=">{System.out.println("Minus equal -> " + image);}|
@@ -64,30 +62,34 @@ TOKEN : {
     <EQ : "==">{System.out.println("Equal -> " + image);}|
     <TRUE : "true">{System.out.println("Boolean -> " + image);}|
     <FALSE : "false">{System.out.println("Boolean -> " + image);}|
-    <COLON : ":">{System.out.println("Double colon -> " + image);}|
     <BIG : ">">{System.out.println("Biggest -> " + image);}|
     <BIGEQ : ">=">{System.out.println("Biggest equal -> " + image);}|
     <LESS : "<">{System.out.println("Minus -> " + image);}|
     <LESSEQ : "<=">{System.out.println("Minus equal -> " + image);}|
-    <DOUBLECOMMA: "\"">{System.out.println("Double comma -> " + image);}| 
     <NOTEQ : "!=">{System.out.println("Not equal -> " + image);}
 }
+//Caracteres
 TOKEN : {
-    <#CHAR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])*>|
-    <IDENTIFIER : (<CHAR>)+>{System.out.println("Texto -> " + image);}|
-    <NUMBER : (["0"-"9"])|(["0"-"9"])"."(["0"-"9"])|(["0"-"9"])"."|"."(["0"-"9"])>{System.out.println("Number -> " + image);}
+    <#CHAR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_",":","=","#"])*>|
+    <IDENTIFIER : (<CHAR>)+>|
+    <NUMBER : (["0"-"9"])+|(["0"-"9"])+"."(["0"-"9"])+|(["0"-"9"])+"."|"."(["0"-"9"])+>{System.out.println("Number -> " + image);}
     
 }
+//Simbolos
 TOKEN : {
     <LPAREN : "(">{System.out.println("Left paren -> " + image);}|
     <RPAREN : ")">{System.out.println("Right paren -> " + image);}|
     <LBRACKET : "[">{System.out.println("Left bracket -> " + image);}|
+    <COLON : ":">{System.out.println("Double colon -> " + image);}|
     <RBRACKET : "]">{System.out.println("Right bracket -> " + image);}|
     <lBRACE : "{">{System.out.println("Left brace -> " + image);}|
     <COMMA : ",">{System.out.println("Comma -> " + image);}|
+    <DOUBLECOMMA: "\"">{System.out.println("Double comma -> " + image);}| 
     <RBRACE : "}">{System.out.println("Right brace -> " + image);}
 }
+//operadores aritmeticos
 TOKEN : {
+    <ASIGNACION : "=">{System.out.println("Asignacion -> " + image);}|
     <PLUS : "+">{System.out.println("Plus -> " + image);}|
     <MINUS : "-">{System.out.println("Minus -> " + image);}|
     <TIMES : "*">{System.out.println("Times -> " + image);}|
@@ -95,12 +97,28 @@ TOKEN : {
     <INCR : "++">{System.out.println("Increment -> " + image);}|
     <DECR : "--">{System.out.println("Decrement -> " + image);}
 }
-
+void Input() :
+{Token t;}
+{
+        (
+            <DEF>(t = <IDENTIFIER>{System.out.println("Nombre de funcion -> " + t.image);})[<LPAREN>Args()]<COLON>(<EOL>|<EOLW>)
+            Code()
+            [Return()]
+            <END>[(<EOL>|<EOLW>)+]
+        )+
+        <EOF>
+     
+}
+void Args() :
+{}
+{
+    <IDENTIFIER>[(<COMMA><IDENTIFIER>)+]<RPAREN>
+}
 void Print() :
 {   
 }
 {
-    <PRINT><LPAREN>Imprimible()[<CONCATENACION>Imprimible()]<RPAREN>
+    <PRINT><LPAREN>Imprimible()[<CONCATENACION>Imprimible()]<RPAREN>(<EOL>|<EOLW>)
 }
 
 void Imprimible() :
@@ -110,63 +128,78 @@ void Imprimible() :
     <IDENTIFIER>|<DOUBLECOMMA>(<IDENTIFIER>)*<DOUBLECOMMA>
 }
 
-void Input() :
-{
-}
-{
-    (
-    <DEF><IDENTIFIER><COLON><EOL>
-    Code()
-    [Return()]
-    <END>[<EOL>]
-    )+
-    <EOF> 
-}
+
 void Code() :
 {}
 {
     (
+    variableArray()|
     VariableNormal()|
     VariableOperacion()|
     VariableTexto()|
+    VariableEntrada()|
     Sentencias()
     )+
 }
 void VariableNormal() :
-{}
+{Token t;}
 {   
     //suma = 13 o suma = numero
-    <IDENTIFIER><ASIGNACION>((<NUMBER>)+|<IDENTIFIER>)<EOL>
+    t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);}<ASIGNACION>(<NUMBER>|<IDENTIFIER>)(<EOL>|<EOLW>)
 }
 void VariableOperacion() :
-{}
+{Token t;}
 {
     //suma = a + b 
-    <IDENTIFIER><ASIGNACION>(<NUMBER>|<IDENTIFIER>)+((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)+(<NUMBER>|<IDENTIFIER>)+)+<EOL>
+    t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);}
+    <ASIGNACION>
+    operacion()
+    (<EOL>|<EOLW>)
 }
 void VariableTexto() :
-{}
+{Token t;}
 {
     //palabra = "texto"
-    <IDENTIFIER><ASIGNACION><DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)*<DOUBLECOMMA><EOL>
+    t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);}<ASIGNACION><DOUBLECOMMA>(t = <IDENTIFIER>{System.out.println("Cadena de texto -> " + t.image);}|<NUMBER>)*<DOUBLECOMMA>(<EOL>|<EOLW>)
+}
+void VariableEntrada() :
+{}
+{
+    <IDENTIFIER><ASIGNACION>Entrada()
+}
+void variableArray() :
+{}
+{
+    //array = [1,2,3,4,5]
+   (<IDENTIFIER><ASIGNACION><LBRACKET>((<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)((<COMMA><NUMBER>)|(<COMMA><IDENTIFIER>)|(<COMMA><TRUE>)|(<COMMA><FALSE>))*<RBRACKET>(<EOL>|<EOLW>)))|
+   //array[0] = 1
+   (<IDENTIFIER><LBRACKET>(<NUMBER>|<IDENTIFIER>)<RBRACKET>(<ASIGNACION>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)(<EOL>|<EOLW>)|(<EOL>|<EOLW>)))
+}
+
+void Entrada() :
+{}
+{
+    <INPUT><LPAREN>[<DOUBLECOMMA>(<IDENTIFIER>)+<DOUBLECOMMA>]<RPAREN>(<EOL>|<EOLW>)
 }
 void Sentencias() :
 {}
 {
     (
+        Entrada()|
         SentenciaIf()|
         SentenciaFor()|
         //SentenciaWhile()|
-        SentenciaSwitch()
-        //Imprimir()
+        SentenciaSwitch()|
+        Print()
     )+
 }
 void SentenciaIf() :
 {}
 {
-    <IF>Comparacion()<EOL>
+    <IF>Comparacion()(<EOL>|<EOLW>)
         Code()
-    <END><EOL>
+    [Else()|Elif()]
+    <END>(<EOL>|<EOLW>)
 }
 void Comparacion() : 
 {}
@@ -174,44 +207,66 @@ void Comparacion() :
     //if true
     (<TRUE>|<FALSE>)<COLON>|
     //if a < b || if a < 3 || 3 > a
-    ((<NUMBER>)+|<TRUE>|<FALSE>|<IDENTIFIER>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>|<EQ>)(<TRUE>|<FALSE>|<IDENTIFIER>|(<NUMBER>)+)<COLON>|
+    ((<NUMBER>)|<TRUE>|<FALSE>|<IDENTIFIER>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>|<EQ>)(<TRUE>|<FALSE>|<IDENTIFIER>|<NUMBER>)<COLON>|
     //if a not b or a < b
     (((<NUMBER>)+|<TRUE>|<FALSE>|<IDENTIFIER>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>)((<NUMBER>)+|<TRUE>|<FALSE>|<IDENTIFIER>)[(<OR>|<AND>)])+<COLON>
+}
+void Else() :
+{}
+{
+    <ELSE><COLON>(<EOL>|<EOLW>)
+        Code()
+}
+
+void Elif() :
+{}
+{
+    (
+    <ELIF>Comparacion()(<EOL>|<EOLW>)
+        Code()
+    )+
+    [Else()]
 }
 //Sintaxis de la sentencia del metodo Switch
 void SentenciaSwitch() :
 {}
 {
-    <SWITCH><LPAREN><IDENTIFIER><RPAREN><lBRACE><EOL>
-    (<CASE>(<IDENTIFIER>|<NUMBER>)<COLON><EOL>
-    Code() 
-    <BREAK>)+<EOL>
-    [<DEFAULT_CASE><COLON><EOL>
-    (Code())
-    <BREAK><EOL>]
-    <RBRACE><EOL>
+    <SWITCH><LPAREN><IDENTIFIER><RPAREN><COLON>(<EOL>|<EOLW>)
+    (<CASE>(<IDENTIFIER>|<NUMBER>)<COLON>(<EOL>|<EOLW>)
+    Code()<BREAK>(<EOL>|<EOLW>))+
+    ((<DEFAULT_CASE><COLON>(<EOL>|<EOLW>)Code()<BREAK>(<EOL>|<EOLW>)<END>(<EOL>|<EOLW>))|<END>(<EOL>|<EOLW>))
 }
 void Return() :
 {}
 {   
     //return variable
-    <RETURN><IDENTIFIER><EOL>|
+    <RETURN><IDENTIFIER>(<EOL>|<EOLW>)|
     //return "texto"
-    <RETURN><DOUBLECOMMA><IDENTIFIER><DOUBLECOMMA><EOL>|
+    <RETURN><DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)*<DOUBLECOMMA>(<EOL>|<EOLW>)|
     //return 3 + 1 / 5
-    <RETURN>((<NUMBER>)+(<PLUS>|<TIMES>|<MINUS>|<DIVIDE>))+<EOL>|
+    <RETURN>(<NUMBER>|<IDENTIFIER>)((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>))+(<EOL>|<EOLW>)|
     //return (3+1) * var || var*(3+1)/4+(3+1)
-    <RETURN>operacion()<EOL>
+    <RETURN>operacion()(<EOL>|<EOLW>)|
+    //return isOdd(number)
+    <RETURN><IDENTIFIER><LPAREN><IDENTIFIER><RPAREN>(<EOL>|<EOLW>)
+    //return 3
+    <RETURN>(<NUMBER>|<IDENTIFIER>)(<EOL>|<EOLW>)
 }
 void operacion() :
 {}
 {
-    <LPAREN>((<NUMBER>)+(<TIMES>|<PLUS>|<MINUS>|<DIVIDE>)[operacion()])<RPAREN>
+    <LPAREN>(<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>)<RPAREN>[(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion()]|
+    (<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())[((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion())+]|
+    <LPAREN>(<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())[((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion())+]<RPAREN>|
+    (<NUMBER>|<IDENTIFIER>)
+    
 }
 void SentenciaFor() :
 {}
 {
         //for i | for numero in [0 1 2 3 4] | in ("hola") | in ["mike jorge 29"]
-	//<FOR><IDENTIFIER><IN>(<LPAREN>|<LBRACKET>)([<DOUBLECOMMA>]<IDENTIFIER>[<DOUBLECOMMA>]|<NUMBER>)(<RPARENT>|<RBRACKET>)<COLON><EOL>
-    <END>
+	<FOR><IDENTIFIER><IN>(<LPAREN>|<LBRACKET>)([<DOUBLECOMMA>](<IDENTIFIER>)*[<DOUBLECOMMA>]|(<NUMBER>)*)(<RPAREN>|<RBRACKET>)<COLON>(<EOL>|<EOLW>)
+        Code()
+    <END>(<EOL>|<EOLW>)
 }
+

@@ -1,9 +1,17 @@
 def function :
     contador = 0
-    switch (contador){
-       case 1:
-                    breack
-       case 2:
-                    breack
-   }
+    switch ( contador ): 
+         case 1:
+    array[0] = 1
+        break
+         case 2:
+    nombre = jorge    
+        break
+        case 3:
+    suma = 1 + 2  
+        break
+         default:
+    text = "hola mundo"
+        break
+    end
 end
