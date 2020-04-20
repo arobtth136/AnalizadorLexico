@@ -27,7 +27,7 @@ SKIP :
 TOKEN : {
     <DEF : "def">{System.out.println("Definicion de funcion -> " + image);}|
     <END : "end">{System.out.println("end -> " + image);}|
-    <RETURN : "retrun">{{System.out.println("return -> " + image);}}|
+    <RETURN : "return">{{System.out.println("return -> " + image);}}|
     <EOL : "\n">|
     <EOLW: "\r\n">
 }
@@ -240,7 +240,7 @@ void Return() :
 {}
 {   
     //return variable
-    <RETURN><IDENTIFIER>(<EOL>|<EOLW>)|
+    <RETURN>(<NUMBER>|<IDENTIFIER>)(<EOL>|<EOLW>)|
     //return "texto"
     <RETURN><DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)*<DOUBLECOMMA>(<EOL>|<EOLW>)|
     //return 3 + 1 / 5
@@ -249,8 +249,6 @@ void Return() :
     <RETURN>operacion()(<EOL>|<EOLW>)|
     //return isOdd(number)
     <RETURN><IDENTIFIER><LPAREN><IDENTIFIER><RPAREN>(<EOL>|<EOLW>)
-    //return 3
-    <RETURN>(<NUMBER>|<IDENTIFIER>)(<EOL>|<EOLW>)
 }
 void operacion() :
 {}
