@@ -53,6 +53,7 @@ public class Gui extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cobra - Analizador léxico y sintáctico");
         setBackground(new java.awt.Color(255, 255, 255));
+        getContentPane().setLayout(new java.awt.BorderLayout());
 
         panel1.setBackground(new java.awt.Color(35, 98, 236));
         panel1.setPreferredSize(new java.awt.Dimension(307, 782));
@@ -63,7 +64,7 @@ public class Gui extends javax.swing.JFrame {
         btnAnalizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Comp/search.png"))); // NOI18N
         btnAnalizar.setText("   Analizar");
         btnAnalizar.setContentAreaFilled(false);
-        btnAnalizar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAnalizar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnAnalizar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAnalizar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnAnalizar.addActionListener(new java.awt.event.ActionListener() {
@@ -79,7 +80,7 @@ public class Gui extends javax.swing.JFrame {
         btnAbrir.setText("   Abrir");
         btnAbrir.setBorderPainted(false);
         btnAbrir.setContentAreaFilled(false);
-        btnAbrir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAbrir.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnAbrir.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAbrir.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnAbrir.addActionListener(new java.awt.event.ActionListener() {
@@ -109,7 +110,7 @@ public class Gui extends javax.swing.JFrame {
             .addComponent(btnAnalizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnAbrir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                .addContainerGap(115, Short.MAX_VALUE)
+                .addContainerGap(114, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addGap(111, 111, 111))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
@@ -161,7 +162,6 @@ public class Gui extends javax.swing.JFrame {
             try {
                 br = new BufferedReader(new FileReader(f));
             } catch (FileNotFoundException ex) {
-            } catch (IOException ex) {
             }
             try {
                 l = br.readLine();
