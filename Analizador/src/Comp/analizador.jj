@@ -200,11 +200,20 @@ void Sentencias() :
         Entrada()|
         SentenciaIf()|
         SentenciaFor()|
-        //SentenciaWhile()|
+        SentenciaWhile()|
         SentenciaSwitch()|
         Print()
     )+
 }
+
+void SentenciaWhile() :
+{}
+{
+  <WHILE>Comparacion()(<EOL>|<EOLW>)
+  ((Code()<END>)|<END>) (<EOL>|<EOLW>)
+
+}
+
 void SentenciaIf() :
 {}
 {
