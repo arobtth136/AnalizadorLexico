@@ -56,7 +56,6 @@ public class Gui extends javax.swing.JFrame {
         getContentPane().setLayout(new java.awt.BorderLayout());
 
         panel1.setBackground(new java.awt.Color(35, 98, 236));
-        panel1.setPreferredSize(new java.awt.Dimension(307, 782));
 
         btnAnalizar.setBackground(new java.awt.Color(255, 255, 255));
         btnAnalizar.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -146,7 +145,6 @@ public class Gui extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        txtCodigo.setEditable(false);
         txtCodigo.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
         jPanel1.add(txtCodigo, java.awt.BorderLayout.CENTER);
 
