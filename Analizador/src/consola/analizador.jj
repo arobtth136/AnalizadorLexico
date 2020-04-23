@@ -5,14 +5,15 @@ options {
 PARSER_BEGIN(analizador)
 
 public class analizador {
-    public static void main(String[] args){
-	try {
-	    analizador parser = new analizador(System.in);
-	    parser.Input();
-        System.out.println("El analizador ha terminado");
-	} catch (Exception e) {
-	    System.out.println(e.getMessage());
-	}
+    public static void main(String[] args) throws ParseException, Exception{
+        try {
+            analizador parser = new analizador(System.in);
+            parser.Input();
+            System.out.println("El analizador ha terminado sin errores");
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Se han encontrado errores");
+        }
     }
 }
 
@@ -100,12 +101,13 @@ TOKEN : {
 void Input() :
 {Token t;}
 {
-    Code()|
+    [Code()]
         (
             <DEF>(t = <IDENTIFIER>{System.out.println("Nombre de funcion -> " + t.image );})[<LPAREN>Args()]<COLON>(<EOL>|<EOLW>)
             Code()
             [Return()]
             <END>[(<EOL>|<EOLW>)+]
+            [Code()]
         )+
         <EOF>
      
