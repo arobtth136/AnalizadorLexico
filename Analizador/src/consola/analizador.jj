@@ -1,0 +1,279 @@
+options {
+	LOOKAHEAD = 4;
+    STATIC = false;
+}
+PARSER_BEGIN(analizador)
+
+public class analizador {
+    public static void main(String[] args){
+	try {
+	    analizador parser = new analizador(System.in);
+	    parser.Input();
+        System.out.println("El analizador ha terminado");
+	} catch (Exception e) {
+	    System.out.println(e.getMessage());
+	}
+    }
+}
+
+PARSER_END(analizador)
+
+SKIP :
+{
+    " " |
+    "\t"
+
+}
+TOKEN : {
+    <DEF : "def">{System.out.println("Definicion de funcion -> " + image);}|
+    <END : "end">{System.out.println("end -> " + image);}|
+    <RETURN : "return">{{System.out.println("return -> " + image);}}|
+    <EOL : "\n">|
+    <EOLW: "\r\n">
+}
+//Sentencias
+TOKEN : {
+    <IF : "if">{System.out.println("if -> " + image);}|
+    <ELSE : "else">{System.out.println("else -> " + image ); }|
+    <ELIF : "elif">{System.out.println("else if ->" + image ); }|
+    <BREAK : "break">{System.out.println("break -> " + image );}|
+    <SWITCH : "switch">{System.out.println("switch -> " + image );}|
+    <CASE : "case">{System.out.println("case -> " + image );}|
+    <DEFAULT_CASE : "default">{System.out.println("default -> " + image );}|
+    <PRINT : "print">{System.out.println("print -> " + image );}|
+    <INPUT : "input">{System.out.println("input -> " + image );}|
+    <IN : "in">{System.out.println("in -> " + image );}
+}
+//Ciclos
+TOKEN : {
+    <WHILE : "while">{System.out.println("while -> " + image );}|
+    <FOR : "for">{System.out.println("for -> " + image );}
+}
+//Operadores
+TOKEN : {
+    <CONCATENACION : "&">{System.out.println("Concatenacion -> " + image );}|
+    <PLUS_EQ : "+=">{System.out.println("Plus equal -> " + image );}|
+    <MINUS_EQ : "-=">{System.out.println("Minus equal -> " + image );}|
+    <TIMES_EQ : "*=">{System.out.println("Times equal -> " + image );}|
+    <DIVIDE_EQ : "/=">{System.out.println("Divide equal -> " + image );}| 
+    <AND : "and">{System.out.println("and -> " + image );}|
+    <OR : "or">{System.out.println("or -> " + image );}|
+    <NOT : "not">{System.out.println("not -> " + image );}|
+    <EQ : "==">{System.out.println("Equal -> " + image );}|
+    <TRUE : "true">{System.out.println("Boolean -> " + image );}|
+    <FALSE : "false">{System.out.println("Boolean -> " + image );}|
+    <BIG : ">">{System.out.println("Biggest -> " + image );}|
+    <BIGEQ : ">=">{System.out.println("Biggest equal -> " + image );}|
+    <LESS : "<">{System.out.println("Minus -> " + image );}|
+    <LESSEQ : "<=">{System.out.println("Minus equal -> " + image );}|
+    <NOTEQ : "!=">{System.out.println("Not equal -> " + image );}
+}
+//Caracteres
+TOKEN : {
+    <#CHAR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_",":","=","#"])*>|
+    <IDENTIFIER : (<CHAR>)+>|
+    <NUMBER : (["0"-"9"])+|(["0"-"9"])+"."(["0"-"9"])+|(["0"-"9"])+"."|"."(["0"-"9"])+>{System.out.println("Number -> " + image );}
+    
+}
+//Simbolos
+TOKEN : {
+    <LPAREN : "(">{System.out.println("Left paren -> " + image );}|
+    <RPAREN : ")">{System.out.println("Right paren -> " + image );}|
+    <LBRACKET : "[">{System.out.println("Left bracket -> " + image );}|
+    <COLON : ":">{System.out.println("Double colon -> " + image );}|
+    <RBRACKET : "]">{System.out.println("Right bracket -> " + image );}|
+    <lBRACE : "{">{System.out.println("Left brace -> " + image );}|
+    <COMMA : ",">{System.out.println("Comma -> " + image );}|
+    <DOUBLECOMMA: "\"">{System.out.println("Double comma -> " + image );}| 
+    <RBRACE : "}">{System.out.println("Right brace -> " + image );}
+}
+//operadores aritmeticos
+TOKEN : {
+    <ASIGNACION : "=">{System.out.println("Asignacion -> " + image );}|
+    <PLUS : "+">{System.out.println("Plus -> " + image );}|
+    <MINUS : "-">{System.out.println("Minus -> " + image );}|
+    <TIMES : "*">{System.out.println("Times -> " + image );}|
+    <DIVIDE : "/">{System.out.println("Divide -> " + image );}|
+    <INCR : "++">{System.out.println("Increment -> " + image );}|
+    <DECR : "--">{System.out.println("Decrement -> " + image );}
+}
+void Input() :
+{Token t;}
+{
+    Code()|
+        (
+            <DEF>(t = <IDENTIFIER>{System.out.println("Nombre de funcion -> " + t.image );})[<LPAREN>Args()]<COLON>(<EOL>|<EOLW>)
+            Code()
+            [Return()]
+            <END>[(<EOL>|<EOLW>)+]
+        )+
+        <EOF>
+     
+}
+void Args() :
+{}
+{
+    <IDENTIFIER>[(<COMMA><IDENTIFIER>)+]<RPAREN>
+}
+void Print() :
+{   
+}
+{
+    <PRINT><LPAREN>Imprimible()[<CONCATENACION>Imprimible()]<RPAREN>(<EOL>|<EOLW>)
+}
+
+void Imprimible() :
+{
+}
+{
+    <IDENTIFIER>|<DOUBLECOMMA>(<IDENTIFIER>)*<DOUBLECOMMA>
+}
+
+
+void Code() :
+{}
+{
+    (
+    variableArray()|
+    VariableNormal()|
+    VariableOperacion()|
+    VariableTexto()|
+    VariableEntrada()|
+    variableFuncion()|
+    Sentencias()
+    )+
+}
+void VariableNormal() :
+{Token t;}
+{   
+    //suma = 13 o suma = numero
+    t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);}<ASIGNACION>(<NUMBER>|<IDENTIFIER>)(<EOL>|<EOLW>)
+}
+void VariableOperacion() :
+{Token t;}
+{
+    //suma = a + b 
+    t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);}
+    <ASIGNACION>
+    operacion()
+    (<EOL>|<EOLW>)
+}
+void VariableTexto() :
+{Token t;}
+{
+    //palabra = "texto"
+    t = <IDENTIFIER>{System.out.println("Variable -> " + t.image);}<ASIGNACION><DOUBLECOMMA>(t = <IDENTIFIER>{System.out.println("Cadena de texto -> " + t.image);}|<NUMBER>)*<DOUBLECOMMA>(<EOL>|<EOLW>)
+}
+void VariableEntrada() :
+{}
+{
+    <IDENTIFIER><ASIGNACION>Entrada()
+}
+void variableArray() :
+{}
+{
+    //array = [1,2,3,4,5]
+   (<IDENTIFIER><ASIGNACION><LBRACKET>((<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)((<COMMA><NUMBER>)|(<COMMA><IDENTIFIER>)|(<COMMA><TRUE>)|(<COMMA><FALSE>))*<RBRACKET>(<EOL>|<EOLW>)))|
+   //array[0] = 1
+   (<IDENTIFIER><LBRACKET>(<NUMBER>|<IDENTIFIER>)<RBRACKET>(<ASIGNACION>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)(<EOL>|<EOLW>)))
+}
+
+void variableFuncion() :
+{}
+{
+    <IDENTIFIER><ASIGNACION><IDENTIFIER><LPAREN>(<IDENTIFIER>|<NUMBER>)[(<COMMA>(<IDENTIFIER>|<NUMBER>))+]<RPAREN>(<EOL>|<EOLW>)
+}
+
+void Entrada() :
+{}
+{
+    <INPUT><LPAREN>[<DOUBLECOMMA>(<IDENTIFIER>)+<DOUBLECOMMA>]<RPAREN>(<EOL>|<EOLW>)
+}
+void Sentencias() :
+{}
+{
+    (
+        Entrada()|
+        SentenciaIf()|
+        SentenciaFor()|
+        //SentenciaWhile()|
+        SentenciaSwitch()|
+        Print()
+    )+
+}
+void SentenciaIf() :
+{}
+{
+    <IF>Comparacion()(<EOL>|<EOLW>)
+        Code()
+    [Else()|Elif()]
+    <END>(<EOL>|<EOLW>)
+}
+void Comparacion() : 
+{}
+{
+    //if true
+    (<TRUE>|<FALSE>)<COLON>|
+    //if a < b || if a < 3 || 3 > a
+    ((<NUMBER>)|<TRUE>|<FALSE>|<IDENTIFIER>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>|<EQ>)(<TRUE>|<FALSE>|<IDENTIFIER>|<NUMBER>)<COLON>|
+    //if a not b or a < b
+    (((<NUMBER>)+|<TRUE>|<FALSE>|<IDENTIFIER>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>)((<NUMBER>)+|<TRUE>|<FALSE>|<IDENTIFIER>)[(<OR>|<AND>)])+<COLON>
+}
+void Else() :
+{}
+{
+    <ELSE><COLON>(<EOL>|<EOLW>)
+        Code()
+}
+
+void Elif() :
+{}
+{
+    (
+    <ELIF>Comparacion()(<EOL>|<EOLW>)
+        Code()
+    )+
+    [Else()]
+}
+//Sintaxis de la sentencia del metodo Switch
+void SentenciaSwitch() :
+{}
+{
+    <SWITCH><LPAREN><IDENTIFIER><RPAREN><COLON>(<EOL>|<EOLW>)
+    (<CASE>(<IDENTIFIER>|<NUMBER>)<COLON>(<EOL>|<EOLW>)
+    Code()<BREAK>(<EOL>|<EOLW>))+
+    ((<DEFAULT_CASE><COLON>(<EOL>|<EOLW>)Code()<BREAK>(<EOL>|<EOLW>)<END>(<EOL>|<EOLW>))|<END>(<EOL>|<EOLW>))
+}
+void Return() :
+{}
+{   
+    //return variable
+    <RETURN>(<NUMBER>|<IDENTIFIER>)(<EOL>|<EOLW>)|
+    //return "texto"
+    <RETURN><DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)*<DOUBLECOMMA>(<EOL>|<EOLW>)|
+    //return 3 + 1 / 5
+    <RETURN>(<NUMBER>|<IDENTIFIER>)((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>))+(<EOL>|<EOLW>)|
+    //return (3+1) * var || var*(3+1)/4+(3+1)
+    <RETURN>operacion()(<EOL>|<EOLW>)|
+    //return isOdd(number)
+    <RETURN><IDENTIFIER><LPAREN><IDENTIFIER><RPAREN>(<EOL>|<EOLW>)
+}
+void operacion() :
+{}
+{
+    <LPAREN>(<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>)<RPAREN>[(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion()]|
+    (<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())[((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion())+]|
+    <LPAREN>(<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())[((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion())+]<RPAREN>|
+    (<NUMBER>|<IDENTIFIER>)
+    
+}
+void SentenciaFor() :
+{Token t;
+Token texto;
+}
+{
+        //for i | for numero in [0 1 2 3 4] | in ("hola") | in ["mike jorge 29"]
+	<FOR>(t = <IDENTIFIER>{System.out.println ("Variable -> " + t.image);})<IN>(<LPAREN>|<LBRACKET>)([<DOUBLECOMMA>](((texto = <IDENTIFIER> {System.out.println("Cadena -> "+texto.image);})|<NUMBER>)*|variableArray())[<DOUBLECOMMA>])(<RPAREN>|<RBRACKET>)<COLON>(<EOL>|<EOLW>)
+        Code()
+    <END>(<EOL>|<EOLW>)
+}
