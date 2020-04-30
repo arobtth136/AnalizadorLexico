@@ -1,3 +1,3 @@
 def  variables :
-    operacion = suma / 2 * (caca * 3 + (3 + 1))
+    operacion = suma / 2 * (caca * 3)
 end

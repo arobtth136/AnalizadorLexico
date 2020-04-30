@@ -1,8 +1,10 @@
 package Comp;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -185,10 +187,19 @@ public class Gui extends javax.swing.JFrame {
 
     private void btnAnalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalizarActionPerformed
         FrmAnalisis f = new FrmAnalisis();
-        if (args[0] != null) {
+        if (!txtCodigo.getText().equals("")) {
             try {
-                analizador a = new analizador(f);
-                a.main(args);
+                ByteArrayInputStream texto = new ByteArrayInputStream(txtCodigo.getText().getBytes());
+                analizador a = new analizador(texto);
+                try{
+                    a.Input();
+                    FrmAnalisis.lbAnalisis.setText("Análisis completado");
+                    FrmAnalisis.lbAnalisis.setForeground(Color.green);
+                } catch (ParseException e){
+                    FrmAnalisis.lbAnalisis.setText("Ocurrieron errores");
+                    FrmAnalisis.lbAnalisis.setForeground(Color.red);
+                    FrmAnalisis.txtCodigo.setText(e.getMessage());
+                }
                 f.setVisible(true);
             } catch (Exception ex) {
                 Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
