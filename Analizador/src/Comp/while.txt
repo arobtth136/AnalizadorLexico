@@ -1,4 +1,4 @@
-def prueba:
+def prueba :
 while true : 
 numero = 10 
 end
