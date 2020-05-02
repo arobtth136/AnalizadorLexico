@@ -1,5 +1,5 @@
 def PruebaFor :
-    for i in ("Hola je"):
+    for i in ("Hola je") :
         var = 100
         print("var")
     end
