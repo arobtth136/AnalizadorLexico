@@ -42,9 +42,9 @@ SKIP :
 
 }
 TOKEN : {
-    <DEF : "def">{System.out.println("Definicion de funcion -> " + image);}|
-    <END : "end">{System.out.println("end -> " + image);}|
-    <RETURN : "return">{{System.out.println("return -> " + image);}}|
+    <DEF : "def">{f.txtCodigo.append("funcion -> " + image + System.lineSeparator());}|
+    <END : "end">{f.txtCodigo.append("end -> " + image + System.lineSeparator());}|
+    <RETURN : "return">{f.txtCodigo.append("return -> " + image + System.lineSeparator());}|
     <EOL : "\n">|
     <EOLW: "\r\n">
 }
@@ -87,7 +87,7 @@ TOKEN : {
 }
 //Caracteres
 TOKEN : {
-    <#CHAR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_",":","=","#"])*>|
+    <#CHAR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_",":","=","#","ñ","?"])*>|
     <IDENTIFIER : (<CHAR>)+>|
     <NUMBER : (["0"-"9"])+|(["0"-"9"])+"."(["0"-"9"])+|(["0"-"9"])+"."|"."(["0"-"9"])+>{f.txtCodigo.append("Number -> " + image + System.lineSeparator());}
     
@@ -99,10 +99,8 @@ TOKEN : {
     <LBRACKET : "[">{f.txtCodigo.append("Left bracket -> " + image + System.lineSeparator());}|
     <COLON : ":">{f.txtCodigo.append("Double colon -> " + image + System.lineSeparator());}|
     <RBRACKET : "]">{f.txtCodigo.append("Right bracket -> " + image + System.lineSeparator());}|
-    <lBRACE : "{">{f.txtCodigo.append("Left brace -> " + image + System.lineSeparator());}|
     <COMMA : ",">{f.txtCodigo.append("Comma -> " + image + System.lineSeparator());}|
-    <DOUBLECOMMA: "\"">{f.txtCodigo.append("Double comma -> " + image + System.lineSeparator());}| 
-    <RBRACE : "}">{f.txtCodigo.append("Right brace -> " + image + System.lineSeparator());}
+    <DOUBLECOMMA: "\"">{f.txtCodigo.append("Double comma -> " + image + System.lineSeparator());}
 }
 //operadores aritmeticos
 TOKEN : {
@@ -122,14 +120,16 @@ void Input() :
             Code()
             [Return()]
             <END>[(<EOL>|<EOLW>)+]
-        )+
+        )+|
+        Code()
         <EOF>
      
 }
 void Args() :
-{}
+{Token t;}
 {
-    <IDENTIFIER>[(<COMMA><IDENTIFIER>)+]<RPAREN>
+    (t = <IDENTIFIER>{f.txtCodigo.append("Parametro -> " + t.image + System.lineSeparator());})
+    [(<COMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Parametro -> " + t.image + System.lineSeparator());}))+]<RPAREN>
 }
 void Print() :
 {   
@@ -139,10 +139,9 @@ void Print() :
 }
 
 void Imprimible() :
+{Token t;}
 {
-}
-{
-    <IDENTIFIER>|<DOUBLECOMMA>(<IDENTIFIER>)*<DOUBLECOMMA>
+    <IDENTIFIER>|<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());})*<DOUBLECOMMA>
 }
 
 
@@ -161,15 +160,15 @@ void Code() :
 void VariableNormal() :
 {Token t;}
 {   
-    //suma = 13 o suma = numero
-    t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image);}<ASIGNACION>(<NUMBER>|<IDENTIFIER>)(<EOL>|<EOLW>)
+    //suma = 13 o suma += numero
+    t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image);}(<ASIGNACION>|<PLUS_EQ>|<MINUS_EQ>|<TIMES_EQ>|<DIVIDE_EQ>)(<NUMBER>|<IDENTIFIER>)(<EOL>|<EOLW>)
 }
 void VariableOperacion() :
 {Token t;}
 {
     //suma = a + b 
     t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image);}
-    <ASIGNACION>
+    (<ASIGNACION>|<PLUS_EQ>|<MINUS_EQ>|<TIMES_EQ>|<DIVIDE_EQ>)
     operacion()
     (<EOL>|<EOLW>)
 }
@@ -177,7 +176,7 @@ void VariableTexto() :
 {Token t;}
 {
     //palabra = "texto"
-    t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image);}<ASIGNACION><DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Cadena de texto -> " + t.image);}|<NUMBER>)*<DOUBLECOMMA>(<EOL>|<EOLW>)
+    t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image);}(<ASIGNACION>|<PLUS_EQ>)<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Cadena de texto -> " + t.image);}|<NUMBER>)*<DOUBLECOMMA>(<EOL>|<EOLW>)
 }
 void VariableEntrada() :
 {}
@@ -185,18 +184,19 @@ void VariableEntrada() :
     <IDENTIFIER><ASIGNACION>Entrada()
 }
 void variableArray() :
-{}
+{Token t;}
 {
     //array = [1,2,3,4,5]
-   (<IDENTIFIER><ASIGNACION><LBRACKET>((<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)((<COMMA><NUMBER>)|(<COMMA><IDENTIFIER>)|(<COMMA><TRUE>)|(<COMMA><FALSE>))*<RBRACKET>(<EOL>|<EOLW>)))|
+   (t = <IDENTIFIER>{f.txtCodigo.append("Arreglo -> " + t.image + System.lineSeparator());})<ASIGNACION>
+   <LBRACKET>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)[(<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>))+]<RBRACKET>(<EOL>|<EOLW>)|
    //array[0] = 1
-   (<IDENTIFIER><LBRACKET>(<NUMBER>|<IDENTIFIER>)<RBRACKET>(<ASIGNACION>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)(<EOL>|<EOLW>)|(<EOL>|<EOLW>)))
+   (t = <IDENTIFIER>{f.txtCodigo.append("Arreglo -> " + t.image + System.lineSeparator());})<LBRACKET><NUMBER><RBRACKET><ASIGNACION>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)(<EOL>|<EOLW>)
 }
 
 void Entrada() :
-{}
+{Token t;}
 {
-    <INPUT><LPAREN>[<DOUBLECOMMA>(<IDENTIFIER>)+<DOUBLECOMMA>]<RPAREN>(<EOL>|<EOLW>)
+    <INPUT><LPAREN>[<DOUBLECOMMA>((t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());}))+<DOUBLECOMMA>]<RPAREN>(<EOL>|<EOLW>)
 }
 void Sentencias() :
 {}
@@ -207,7 +207,9 @@ void Sentencias() :
         SentenciaFor()|
         SentenciaWhile()|
         SentenciaSwitch()|
-        Print()
+        Print()|
+        <IDENTIFIER><INCR>(<EOL>|<EOLW>)|
+        <IDENTIFIER><DECR>(<EOL>|<EOLW>)
     )+
 }
 
