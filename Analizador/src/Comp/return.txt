@@ -1,9 +1,9 @@
 def isEven(number):
     number = 1
-    retrun isOdd(number)
+    return isOdd(number)
 end
 
 def isOdd(number):
     number = 2
-    retrun isEven(number)
+    return isEven(number)
 end

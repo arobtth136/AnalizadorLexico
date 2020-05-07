@@ -1,8 +1,10 @@
 package Comp;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -53,9 +55,9 @@ public class Gui extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cobra - Analizador léxico y sintáctico");
         setBackground(new java.awt.Color(255, 255, 255));
+        getContentPane().setLayout(new java.awt.BorderLayout());
 
         panel1.setBackground(new java.awt.Color(35, 98, 236));
-        panel1.setPreferredSize(new java.awt.Dimension(307, 782));
 
         btnAnalizar.setBackground(new java.awt.Color(255, 255, 255));
         btnAnalizar.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -63,7 +65,7 @@ public class Gui extends javax.swing.JFrame {
         btnAnalizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Comp/search.png"))); // NOI18N
         btnAnalizar.setText("   Analizar");
         btnAnalizar.setContentAreaFilled(false);
-        btnAnalizar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAnalizar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnAnalizar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAnalizar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnAnalizar.addActionListener(new java.awt.event.ActionListener() {
@@ -79,7 +81,7 @@ public class Gui extends javax.swing.JFrame {
         btnAbrir.setText("   Abrir");
         btnAbrir.setBorderPainted(false);
         btnAbrir.setContentAreaFilled(false);
-        btnAbrir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAbrir.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnAbrir.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAbrir.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnAbrir.addActionListener(new java.awt.event.ActionListener() {
@@ -109,7 +111,7 @@ public class Gui extends javax.swing.JFrame {
             .addComponent(btnAnalizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnAbrir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                .addContainerGap(115, Short.MAX_VALUE)
+                .addContainerGap(114, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addGap(111, 111, 111))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
@@ -145,7 +147,6 @@ public class Gui extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        txtCodigo.setEditable(false);
         txtCodigo.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
         jPanel1.add(txtCodigo, java.awt.BorderLayout.CENTER);
 
@@ -161,7 +162,6 @@ public class Gui extends javax.swing.JFrame {
             try {
                 br = new BufferedReader(new FileReader(f));
             } catch (FileNotFoundException ex) {
-            } catch (IOException ex) {
             }
             try {
                 l = br.readLine();
@@ -187,10 +187,19 @@ public class Gui extends javax.swing.JFrame {
 
     private void btnAnalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalizarActionPerformed
         FrmAnalisis f = new FrmAnalisis();
-        if (args[0] != null) {
+        if (!txtCodigo.getText().equals("")) {
             try {
-                analizador a = new analizador(f);
-                a.main(args);
+                ByteArrayInputStream texto = new ByteArrayInputStream(txtCodigo.getText().getBytes());
+                analizador a = new analizador(texto);
+                try{
+                    a.Input();
+                    FrmAnalisis.lbAnalisis.setText("Análisis completado");
+                    FrmAnalisis.lbAnalisis.setForeground(Color.green);
+                } catch (ParseException e){
+                    FrmAnalisis.lbAnalisis.setText("Ocurrieron errores");
+                    FrmAnalisis.lbAnalisis.setForeground(Color.red);
+                    FrmAnalisis.txtCodigo.setText(e.getMessage());
+                }
                 f.setVisible(true);
             } catch (Exception ex) {
                 Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);

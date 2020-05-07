@@ -1,5 +1,3 @@
 def  variables :
-    input()
-    variable = input()
-    variable = input("Digite el valor: ")
+    operacion = suma / 2 * (caca * 3)
 end
