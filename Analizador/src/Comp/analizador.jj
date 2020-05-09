@@ -87,7 +87,7 @@ TOKEN : {
 }
 //Caracteres
 TOKEN : {
-    <#CHAR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_",":","=","#","ñ","?"])*>|
+    <#CHAR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_",":","=","#","?"])*>|
     <IDENTIFIER : (<CHAR>)+>|
     <NUMBER : (["0"-"9"])+|(["0"-"9"])+"."(["0"-"9"])+|(["0"-"9"])+"."|"."(["0"-"9"])+>{f.txtCodigo.append("Number -> " + image + System.lineSeparator());}
     
@@ -117,7 +117,7 @@ void Input() :
 {
         (
             <DEF>(t = <IDENTIFIER>{f.txtCodigo.append("Nombre de funcion -> " + t.image + System.lineSeparator());})[<LPAREN>Args()]<COLON>(<EOL>|<EOLW>)
-            Code()
+            [Code()]
             [Return()]
             <END>[(<EOL>|<EOLW>)+]
         )+|
@@ -154,6 +154,7 @@ void Code() :
     VariableOperacion()|
     VariableTexto()|
     VariableEntrada()|
+    VariableFuncion()|
     Sentencias()
     )+
 }
@@ -192,7 +193,11 @@ void variableArray() :
    //array[0] = 1
    (t = <IDENTIFIER>{f.txtCodigo.append("Arreglo -> " + t.image + System.lineSeparator());})<LBRACKET><NUMBER><RBRACKET><ASIGNACION>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)(<EOL>|<EOLW>)
 }
-
+void VariableFuncion() :
+{Token t;}
+{
+    t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image + System.lineSeparator());}<ASIGNACION><IDENTIFIER><LPAREN>Args()(<EOL>|<EOLW>)
+}
 void Entrada() :
 {Token t;}
 {
@@ -268,7 +273,7 @@ void Return() :
 {}
 {   
     //return variable
-    <RETURN>(<NUMBER>|<IDENTIFIER>)(<EOL>|<EOLW>)|
+    <RETURN>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)(<EOL>|<EOLW>)|
     //return "texto"
     <RETURN><DOUBLECOMMA>(<IDENTIFIER>|<NUMBER>)*<DOUBLECOMMA>(<EOL>|<EOLW>)|
     //return 3 + 1 / 5
@@ -276,7 +281,7 @@ void Return() :
     //return (3+1) * var || var*(3+1)/4+(3+1)
     <RETURN>operacion()(<EOL>|<EOLW>)|
     //return isOdd(number)
-    <RETURN><IDENTIFIER><LPAREN><IDENTIFIER><RPAREN>(<EOL>|<EOLW>)
+    <RETURN><IDENTIFIER><LPAREN>Args()(<EOL>|<EOLW>)
 }
 void operacion() :
 {}
@@ -288,10 +293,10 @@ void operacion() :
     
 }
 void SentenciaFor() :
-{}
+{Token t;}
 {
-        //for i | for numero in [0 1 2 3 4] | in ("hola") | in ["mike jorge 29"]
-	<FOR><IDENTIFIER><IN>(<LPAREN>|<LBRACKET>)([<DOUBLECOMMA>](<IDENTIFIER>)*[<DOUBLECOMMA>]|(<NUMBER>)*)(<RPAREN>|<RBRACKET>)<COLON>(<EOL>|<EOLW>)
+	//for i | for numero in [0 1 2 3 4] | in "hola" | in ["mike jorge 29"]
+    <FOR>(t = <IDENTIFIER>{f.txtCodigo.append("Iterador -> " + t.image + System.lineSeparator());})<IN>((<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());})<DOUBLECOMMA>)|<LBRACKET>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)[(<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>))+]<RBRACKET>)<COLON>(<EOL>|<EOLW>)
         Code()
     <END>(<EOL>|<EOLW>)
 }
