@@ -135,7 +135,7 @@ void Print() :
 {   
 }
 {
-    <PRINT><LPAREN>Imprimible()[<CONCATENACION>Imprimible()]<RPAREN>(<EOL>|<EOLW>)
+    <PRINT><LPAREN>Imprimible()[(<CONCATENACION>Imprimible())+]<RPAREN>(<EOL>|<EOLW>)
 }
 
 void Imprimible() :
