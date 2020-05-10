@@ -162,13 +162,13 @@ void VariableNormal() :
 {Token t;}
 {   
     //suma = 13 o suma += numero
-    t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image);}(<ASIGNACION>|<PLUS_EQ>|<MINUS_EQ>|<TIMES_EQ>|<DIVIDE_EQ>)(<NUMBER>|<IDENTIFIER>)(<EOL>|<EOLW>)
+    t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image + System.lineSeparator());}(<ASIGNACION>|<PLUS_EQ>|<MINUS_EQ>|<TIMES_EQ>|<DIVIDE_EQ>)(<NUMBER>|<IDENTIFIER>)(<EOL>|<EOLW>)
 }
 void VariableOperacion() :
 {Token t;}
 {
     //suma = a + b 
-    t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image);}
+    t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image + System.lineSeparator());}
     (<ASIGNACION>|<PLUS_EQ>|<MINUS_EQ>|<TIMES_EQ>|<DIVIDE_EQ>)
     operacion()
     (<EOL>|<EOLW>)
@@ -177,7 +177,12 @@ void VariableTexto() :
 {Token t;}
 {
     //palabra = "texto"
-    t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image);}(<ASIGNACION>|<PLUS_EQ>)<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Cadena de texto -> " + t.image);}|<NUMBER>)*<DOUBLECOMMA>(<EOL>|<EOLW>)
+    t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image + System.lineSeparator());}(<ASIGNACION>|<PLUS_EQ>)Texto()(<EOL>|<EOLW>)
+}
+void Texto() :
+{Token t;}
+{
+    <DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Cadena de texto -> " + t.image + System.lineSeparator());}|<NUMBER>)*<DOUBLECOMMA>
 }
 void VariableEntrada() :
 {}
@@ -240,9 +245,9 @@ void Comparacion() :
     //if true
     (<TRUE>|<FALSE>)<COLON>|
     //if a < b || if a < 3 || 3 > a
-    ((<NUMBER>)|<TRUE>|<FALSE>|<IDENTIFIER>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>|<EQ>)(<TRUE>|<FALSE>|<IDENTIFIER>|<NUMBER>)<COLON>|
+    (<NUMBER>|<TRUE>|<FALSE>|<IDENTIFIER>|Texto())(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>|<EQ>)(<TRUE>|<FALSE>|<IDENTIFIER>|<NUMBER>|Texto())<COLON>|
     //if a not b or a < b
-    (((<NUMBER>)+|<TRUE>|<FALSE>|<IDENTIFIER>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>)((<NUMBER>)+|<TRUE>|<FALSE>|<IDENTIFIER>)[(<OR>|<AND>)])+<COLON>
+    ((<NUMBER>|<TRUE>|<FALSE>|<IDENTIFIER>|Texto())(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>|<EQ>)(<NUMBER>|<TRUE>|<FALSE>|<IDENTIFIER>|Texto())[(<OR>|<AND>)])+<COLON>
 }
 void Else() :
 {}
