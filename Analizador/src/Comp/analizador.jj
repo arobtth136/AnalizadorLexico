@@ -87,6 +87,14 @@ TOKEN : {
     <LESSEQ : "<=">{f.txtCodigo.append("Minus equal -> " + image + System.lineSeparator());}|
     <NOTEQ : "!=">{f.txtCodigo.append("Not equal -> " + image + System.lineSeparator());}
 }
+
+//Caracteres
+TOKEN : {
+    <#CHAR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_",":","=","#","?"])*>|
+    <IDENTIFIER : (<CHAR>)+>|
+    <NUMBER : (["0"-"9"])+|(["0"-"9"])+"."(["0"-"9"])+|(["0"-"9"])+"."|"."(["0"-"9"])+>{f.txtCodigo.append("Number -> " + image + System.lineSeparator());}
+    
+}
 //Simbolos
 TOKEN : {
     <LPAREN : "(">{f.txtCodigo.append("Left paren -> " + image + System.lineSeparator());}|
@@ -139,6 +147,12 @@ void Print() :
 {
     <PRINT><LPAREN>Imprimible()[(<CONCATENACION>Imprimible())+]<RPAREN>(<EOL>|<EOLW>)
 }
+
+
+void Imprimible() :
+{Token t;}
+{
+    <IDENTIFIER>|<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());})*<DOUBLECOMMA>
 void AuxPrint() :
 {}
 {
@@ -189,7 +203,11 @@ void VariableTexto() :
 {Token t;}
 {
     //palabra = "texto"
+
+    t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image + System.lineSeparator());}(<ASIGNACION>|<PLUS_EQ>)Texto()(<EOL>|<EOLW>)
+
     t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image + System.lineSeparator());}(<ASIGNACION>|<PLUS_EQ>|<MINUS_EQ>)Texto()(<EOL>|<EOLW>)
+
 }
 void Texto() :
 {Token t;}
@@ -205,10 +223,17 @@ void variableArray() :
 {Token t;}
 {
     //array = [1,2,3,4,5]
+
+   (t = <IDENTIFIER>{f.txtCodigo.append("Arreglo -> " + t.image + System.lineSeparator());})<ASIGNACION>(((<LBRACKET><RBRACKET>)|
+   <LBRACKET>(Texto()|<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)[(Texto()|<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>))+]<RBRACKET>)(<EOL>|<EOLW>))|
+   //array[0] = 1
+   (t = <IDENTIFIER>{f.txtCodigo.append("Arreglo -> " + t.image + System.lineSeparator());})(<LBRACKET>(<NUMBER>|<IDENTIFIER>)<RBRACKET>((<EOL>|<EOLW>)|(<ASIGNACION>(Texto()|<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)(<EOL>|<EOLW>))))
+
    (t = <IDENTIFIER>{f.txtCodigo.append("Arreglo -> " + t.image + System.lineSeparator());})<ASIGNACION>
    <LBRACKET>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)[(<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>))+]<RBRACKET>(<EOL>|<EOLW>)|
    //array[0] = 1
    (t = <IDENTIFIER>{f.txtCodigo.append("Arreglo -> " + t.image + System.lineSeparator());})<LBRACKET><NUMBER><RBRACKET><ASIGNACION>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)(<EOL>|<EOLW>)
+
 }
 void VariableFuncion() :
 {Token t;}
@@ -316,7 +341,11 @@ void SentenciaFor() :
 {Token t;}
 {
 	//for i | for numero in [0 1 2 3 4] | in "hola" | in ["mike jorge 29"]
+
+    <FOR>(t = <IDENTIFIER>{f.txtCodigo.append("Iterador -> " + t.image + System.lineSeparator());})<IN>((<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());})<DOUBLECOMMA>)|<LBRACKET>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)[(<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>))+]<RBRACKET>)<COLON>(<EOL>|<EOLW>)
+
     <FOR>(t = <IDENTIFIER>{f.txtCodigo.append("Iterador -> " + t.image + System.lineSeparator());})<IN>((<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());})<DOUBLECOMMA>)|<LBRACKET>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)[(<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>))+]<RBRACKET>|<NUMBER>)<COLON>(<EOL>|<EOLW>)
+
         Code()
     <END>(<EOL>|<EOLW>)
 }
