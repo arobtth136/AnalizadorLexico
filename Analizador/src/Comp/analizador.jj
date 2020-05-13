@@ -41,6 +41,8 @@ SKIP :
     "\t"
 
 }
+
+
 TOKEN : {
     <DEF : "def">{f.txtCodigo.append("funcion -> " + image + System.lineSeparator());}|
     <END : "end">{f.txtCodigo.append("end -> " + image + System.lineSeparator());}|
@@ -85,13 +87,6 @@ TOKEN : {
     <LESSEQ : "<=">{f.txtCodigo.append("Minus equal -> " + image + System.lineSeparator());}|
     <NOTEQ : "!=">{f.txtCodigo.append("Not equal -> " + image + System.lineSeparator());}
 }
-//Caracteres
-TOKEN : {
-    <#CHAR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_",":","=","#","?"])*>|
-    <IDENTIFIER : (<CHAR>)+>|
-    <NUMBER : (["0"-"9"])+|(["0"-"9"])+"."(["0"-"9"])+|(["0"-"9"])+"."|"."(["0"-"9"])+>{f.txtCodigo.append("Number -> " + image + System.lineSeparator());}
-    
-}
 //Simbolos
 TOKEN : {
     <LPAREN : "(">{f.txtCodigo.append("Left paren -> " + image + System.lineSeparator());}|
@@ -111,6 +106,13 @@ TOKEN : {
     <DIVIDE : "/">{f.txtCodigo.append("Divide -> " + image + System.lineSeparator());}|
     <INCR : "++">{f.txtCodigo.append("Increment -> " + image + System.lineSeparator());}|
     <DECR : "--">{f.txtCodigo.append("Decrement -> " + image + System.lineSeparator());}
+}
+//Caracteres
+TOKEN : {
+    <#CHAR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_",":","=","#","?",",", "+", "-", "*", "/", "="])*>|
+    <IDENTIFIER : (<CHAR>)+>|
+    <NUMBER : (["0"-"9"])+|(["0"-"9"])+"."(["0"-"9"])+|(["0"-"9"])+"."|"."(["0"-"9"])+>{f.txtCodigo.append("Number -> " + image + System.lineSeparator());}
+    
 }
 void Input() :
 {Token t;}
@@ -137,11 +139,21 @@ void Print() :
 {
     <PRINT><LPAREN>Imprimible()[(<CONCATENACION>Imprimible())+]<RPAREN>(<EOL>|<EOLW>)
 }
-
+void AuxPrint() :
+{}
+{
+    <PLUS>|
+    <MINUS>|
+    <TIMES>|
+    <DIVIDE>|
+    "="|
+    <TRUE>|
+    <FALSE>
+}
 void Imprimible() :
 {Token t;}
 {
-    <IDENTIFIER>|<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());})*<DOUBLECOMMA>
+    <IDENTIFIER>|<TRUE>|<FALSE>|<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());}|AuxPrint()|operacion())*<DOUBLECOMMA>
 }
 
 
@@ -177,7 +189,7 @@ void VariableTexto() :
 {Token t;}
 {
     //palabra = "texto"
-    t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image + System.lineSeparator());}(<ASIGNACION>|<PLUS_EQ>)Texto()(<EOL>|<EOLW>)
+    t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image + System.lineSeparator());}(<ASIGNACION>|<PLUS_EQ>|<MINUS_EQ>)Texto()(<EOL>|<EOLW>)
 }
 void Texto() :
 {Token t;}
@@ -291,6 +303,9 @@ void Return() :
 void operacion() :
 {}
 {
+    /*(3+1)*(var/2)*5 | ((3+1)/2)*(4 + 2)
+    <LPAREN>(<NUMBER>|<IDENTIFIER>)<PLUS>|<MINUS>|<TIMES>|<DIVIDE>[operacion()](<NUMBER>|<IDENTIFIER>)<RPAREN>|
+    (<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>(<NUMBER>|<IDENTIFIER>))+ */
     <LPAREN>(<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>)<RPAREN>[(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion()]|
     (<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())[((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion())+]|
     <LPAREN>(<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())[((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion())+]<RPAREN>|
@@ -301,7 +316,7 @@ void SentenciaFor() :
 {Token t;}
 {
 	//for i | for numero in [0 1 2 3 4] | in "hola" | in ["mike jorge 29"]
-    <FOR>(t = <IDENTIFIER>{f.txtCodigo.append("Iterador -> " + t.image + System.lineSeparator());})<IN>((<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());})<DOUBLECOMMA>)|<LBRACKET>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)[(<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>))+]<RBRACKET>)<COLON>(<EOL>|<EOLW>)
+    <FOR>(t = <IDENTIFIER>{f.txtCodigo.append("Iterador -> " + t.image + System.lineSeparator());})<IN>((<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());})<DOUBLECOMMA>)|<LBRACKET>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)[(<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>))+]<RBRACKET>|<NUMBER>)<COLON>(<EOL>|<EOLW>)
         Code()
     <END>(<EOL>|<EOLW>)
 }
