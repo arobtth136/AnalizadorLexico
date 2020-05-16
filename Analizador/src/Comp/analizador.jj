@@ -109,9 +109,9 @@ TOKEN : {
 }
 //Caracteres
 TOKEN : {
-    <#CHAR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_",":","=","#","?",",", "+", "-", "*", "/", "="])*>|
-    <IDENTIFIER : (<CHAR>)+>|
-    <NUMBER : (["0"-"9"])+|(["0"-"9"])+"."(["0"-"9"])+|(["0"-"9"])+"."|"."(["0"-"9"])+>{f.txtCodigo.append("Number -> " + image + System.lineSeparator());}
+    <#CHAR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_",":","#","?",",", "+", "-", "*", "/"])*>|
+    <NUMBER : (["0"-"9"])+|(["0"-"9"])+"."(["0"-"9"])+|(["0"-"9"])+"."|"."(["0"-"9"])+>{f.txtCodigo.append("Number -> " + image + System.lineSeparator());}|
+    <IDENTIFIER : (<CHAR>|<NUMBER>)+>
     
 }
 void Input() :
@@ -153,7 +153,8 @@ void AuxPrint() :
 void Imprimible() :
 {Token t;}
 {
-    <IDENTIFIER>|<TRUE>|<FALSE>|<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());}|AuxPrint()|operacion())*<DOUBLECOMMA>
+    (t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image + System.lineSeparator());})
+    |<TRUE>|<FALSE>|<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());}|AuxPrint()|operacion())*<DOUBLECOMMA>
 }
 
 
@@ -161,6 +162,7 @@ void Code() :
 {}
 {
     (
+    VariableBooleana()|
     variableArray()|
     VariableNormal()|
     VariableOperacion()|
@@ -169,6 +171,11 @@ void Code() :
     VariableFuncion()|
     Sentencias()
     )+
+}
+void VariableBooleana() :
+{Token t;}
+{
+    t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image + System.lineSeparator());}(<TRUE>|<FALSE>)(<EOL>|<EOLW>)
 }
 void VariableNormal() :
 {Token t;}
@@ -239,7 +246,8 @@ void SentenciaWhile() :
 {}
 {
   <WHILE>Comparacion()(<EOL>|<EOLW>)
-  ((Code()<END>)|<END>) (<EOL>|<EOLW>)
+  Code()
+  <END>(<EOL>|<EOLW>)
 
 }
 
@@ -247,7 +255,8 @@ void SentenciaIf() :
 {}
 {
     <IF>Comparacion()(<EOL>|<EOLW>)
-        Code()
+        [Code()]
+        [<RETURN>]
     [Else()|Elif()]
     <END>(<EOL>|<EOLW>)
 }
@@ -255,9 +264,13 @@ void Comparacion() :
 {}
 {
     //if true
-    (<TRUE>|<FALSE>)<COLON>|
+    (<TRUE>|<FALSE>|<IDENTIFIER>)<COLON>|
     //if a < b || if a < 3 || 3 > a
-    (<NUMBER>|<TRUE>|<FALSE>|<IDENTIFIER>|Texto())(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>|<EQ>)(<TRUE>|<FALSE>|<IDENTIFIER>|<NUMBER>|Texto())<COLON>|
+    (<NUMBER>|<IDENTIFIER>|Texto())(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<EQ>)(<IDENTIFIER>|<NUMBER>|Texto())<COLON>|
+    //if true == true || if not true
+    (<TRUE>|<FALSE>|<IDENTIFIER>)(<EQ>|<NOT>)(<TRUE>|<FALSE>|<IDENTIFIER>)<COLON>|
+    //not true || not false
+    <NOT>(<TRUE>|<FALSE>)<COLON>|
     //if a not b or a < b
     ((<NUMBER>|<TRUE>|<FALSE>|<IDENTIFIER>|Texto())(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>|<EQ>)(<NUMBER>|<TRUE>|<FALSE>|<IDENTIFIER>|Texto())[(<OR>|<AND>)])+<COLON>
 }
@@ -265,7 +278,7 @@ void Else() :
 {}
 {
     <ELSE><COLON>(<EOL>|<EOLW>)
-        Code()
+        [Code()][<RETURN>]
 }
 
 void Elif() :
@@ -273,7 +286,7 @@ void Elif() :
 {
     (
     <ELIF>Comparacion()(<EOL>|<EOLW>)
-        Code()
+        [Code()][<RETURN>]
     )+
     [Else()]
 }
@@ -303,9 +316,6 @@ void Return() :
 void operacion() :
 {}
 {
-    /*(3+1)*(var/2)*5 | ((3+1)/2)*(4 + 2)
-    <LPAREN>(<NUMBER>|<IDENTIFIER>)<PLUS>|<MINUS>|<TIMES>|<DIVIDE>[operacion()](<NUMBER>|<IDENTIFIER>)<RPAREN>|
-    (<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>(<NUMBER>|<IDENTIFIER>))+ */
     <LPAREN>(<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>)<RPAREN>[(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion()]|
     (<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())[((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion())+]|
     <LPAREN>(<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())[((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion())+]<RPAREN>|
