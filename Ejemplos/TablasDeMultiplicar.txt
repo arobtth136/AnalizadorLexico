@@ -1,0 +1,7 @@
+def TablasDeMultiplicar :
+	for i in 10 :
+		for j in 10 :
+			print(i & " * " & j & " = " & i*j)
+		end
+	end
+end

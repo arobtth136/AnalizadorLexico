@@ -1,0 +1,22 @@
+def mayorTres :
+    a = 0
+    b = 0
+    c = 0
+    print ("Ingrese el primer numero")
+    a = input()
+    print ("Ingrese el segundo numero")
+    b = input()
+    print ("Ingrese el tercer numero")
+    c = input() 
+    if a > b :
+        if a > c :
+            print ("El mayor es: "&a)
+        else :
+            print ("El mayor es: "&c)
+        end
+    elif b > c :
+            print ("El mayor es: "&b)
+    else : 
+            print ("El mayor es: "&c)
+    end   
+end

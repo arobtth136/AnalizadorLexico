@@ -6,19 +6,16 @@ import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Gui extends javax.swing.JFrame {
@@ -196,8 +193,12 @@ public class Gui extends javax.swing.JFrame {
                     FrmAnalisis.lbAnalisis.setText("Análisis completado");
                     FrmAnalisis.lbAnalisis.setForeground(Color.green);
                 } catch (ParseException e){
-                    FrmAnalisis.lbAnalisis.setText("Ocurrieron errores");
+                    FrmAnalisis.lbAnalisis.setText("Error sintáctico");
                     FrmAnalisis.lbAnalisis.setForeground(Color.red);
+                    FrmAnalisis.txtCodigo.setText(e.getMessage());
+                } catch (TokenMgrError e){
+                    FrmAnalisis.lbAnalisis.setText("Error Léxico");
+                    FrmAnalisis.lbAnalisis.setForeground(Color.yellow);
                     FrmAnalisis.txtCodigo.setText(e.getMessage());
                 }
                 f.setVisible(true);
