@@ -289,7 +289,7 @@ void SentenciaSwitch() :
     <SWITCH><LPAREN><IDENTIFIER><RPAREN><COLON>(<EOL>|<EOLW>)
     (<CASE>(<IDENTIFIER>|<NUMBER>)<COLON>(<EOL>|<EOLW>)
     Code()<BREAK>(<EOL>|<EOLW>))+
-    ((<DEFAULT_CASE><COLON>(<EOL>|<EOLW>)Code()<BREAK>(<EOL>|<EOLW>)<END>(<EOL>|<EOLW>))|<END>(<EOL>|<EOLW>))
+    ((<DEFAULT_CASE><COLON>(<EOL>|<EOLW>)Code()<BREAK>(<EOL>|<EOLW>)<END>(<EOL>|<EOLW>))|<END>(<EOL>|<EOLW>)) 
 }
 void Return() :
 {}
@@ -308,7 +308,7 @@ void Return() :
 void operacion() :
 {}
 {
-    <LPAREN>(<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>)<RPAREN>[(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion()]|
+    <LPAREN>(<NUMBER>|<IDENTIFIER>|operacion())(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())<RPAREN>[(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion()]|
     (<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())[((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion())+]|
     <LPAREN>(<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())[((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion())+]<RPAREN>|
     (<NUMBER>|<IDENTIFIER>)
@@ -317,7 +317,7 @@ void SentenciaFor() :
 {Token t;}
 {
 	//for i | for numero in [0 1 2 3 4] | in "hola" | in ["mike jorge 29"]
-    <FOR>(t = <IDENTIFIER>{f.txtCodigo.append("Iterador -> " + t.image + System.lineSeparator());})<IN>((<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());})<DOUBLECOMMA>)|<LBRACKET>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)[(<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>))+]<RBRACKET>|<NUMBER>|<IDENTIFIER>)<COLON>(<EOL>|<EOLW>)
+    <FOR>(t = <IDENTIFIER>{f.txtCodigo.append("Iterador -> " + t.image + System.lineSeparator());})<IN>((<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());})+<DOUBLECOMMA>)|<LBRACKET>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)[(<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>))+]<RBRACKET>|<NUMBER>|<IDENTIFIER>)<COLON>(<EOL>|<EOLW>)
         Code()
     <END>(<EOL>|<EOLW>)
 }
