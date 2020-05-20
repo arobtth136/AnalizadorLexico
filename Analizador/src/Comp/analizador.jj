@@ -203,7 +203,7 @@ void variableArray() :
 {Token t;}
 {
    (t = <IDENTIFIER>{f.txtCodigo.append("Arreglo -> " + t.image + System.lineSeparator());})<ASIGNACION>
-   <LBRACKET>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)[(<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>))+]<RBRACKET>(<EOL>|<EOLW>)|
+   <LBRACKET>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>|Texto())[(<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>|Texto()))+]<RBRACKET>(<EOL>|<EOLW>)|
    (t = <IDENTIFIER>{f.txtCodigo.append("Arreglo -> " + t.image + System.lineSeparator());})<ASIGNACION><LBRACKET><RBRACKET>(<EOL>|<EOLW>)|
    //array[0] = 1
    (t = <IDENTIFIER>{f.txtCodigo.append("Arreglo -> " + t.image + System.lineSeparator());})<LBRACKET>(<NUMBER>|<IDENTIFIER>)<RBRACKET><ASIGNACION>(<NUMBER>|<IDENTIFIER>[operacion()]|<TRUE>|<FALSE>|Texto()|operacion())(<EOL>|<EOLW>)
@@ -316,7 +316,7 @@ void SentenciaFor() :
 {Token t;}
 {
 	//for i | for numero in [0 1 2 3 4] | in "hola" | in ["mike jorge 29"]
-    <FOR>(t = <IDENTIFIER>{f.txtCodigo.append("Iterador -> " + t.image + System.lineSeparator());})<IN>((<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());})+<DOUBLECOMMA>)|<LBRACKET>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)[(<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>))+]<RBRACKET>|<NUMBER>|<IDENTIFIER>)<COLON>(<EOL>|<EOLW>)
+    <FOR>(t = <IDENTIFIER>{f.txtCodigo.append("Iterador -> " + t.image + System.lineSeparator());})<IN>((<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());})+<DOUBLECOMMA>)|<LBRACKET>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>|Texto())[(<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>|Texto()))+]<RBRACKET>|<NUMBER>|<IDENTIFIER>)<COLON>(<EOL>|<EOLW>)
         Code()
     <END>(<EOL>|<EOLW>)
 }
