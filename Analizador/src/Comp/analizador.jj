@@ -120,8 +120,8 @@ void Input() :
 void Args() :
 {Token t;}
 {
-    (t = <IDENTIFIER>{f.txtCodigo.append("Parametro -> " + t.image + System.lineSeparator());})
-    [(<COMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Parametro -> " + t.image + System.lineSeparator());}))+]<RPAREN>
+    (t = <IDENTIFIER>{f.txtCodigo.append("Parametro -> " + t.image + System.lineSeparator());}|<NUMBER>)
+    [(<COMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Parametro -> " + t.image + System.lineSeparator());}|<NUMBER>))+]<RPAREN>
 }
 void Print() :
 {   
@@ -166,7 +166,7 @@ void Code() :
 void VariableBooleana() :
 {Token t;}
 {
-    t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image + System.lineSeparator());}(<TRUE>|<FALSE>)(<EOL>|<EOLW>)
+    t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image + System.lineSeparator());}<ASIGNACION>(<TRUE>|<FALSE>)(<EOL>|<EOLW>) 
 }
 void VariableNormal() :
 {Token t;}
@@ -248,7 +248,6 @@ void SentenciaIf() :
 {
     <IF>Comparacion()(<EOL>|<EOLW>)
         [Code()]
-        [<RETURN>]
     [Else()|Elif()]
     <END>(<EOL>|<EOLW>)
 }
@@ -270,7 +269,7 @@ void Else() :
 {}
 {
     <ELSE><COLON>(<EOL>|<EOLW>)
-        [Code()][<RETURN>]
+        [Code()]
 }
 
 void Elif() :
@@ -278,7 +277,7 @@ void Elif() :
 {
     (
     <ELIF>Comparacion()(<EOL>|<EOLW>)
-        [Code()][<RETURN>]
+        [Code()]
     )+
     [Else()]
 }
