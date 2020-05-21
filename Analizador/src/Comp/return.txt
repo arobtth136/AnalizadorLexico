@@ -1,9 +1,0 @@
-def isEven(number):
-    number = 1
-    return isOdd(number)
-end
-
-def isOdd(number):
-    number = 2
-    return isEven(number)
-end
