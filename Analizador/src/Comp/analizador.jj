@@ -43,7 +43,7 @@ SKIP :
 }
 
 
-TOKEN : {<DEF : "def">{f.txtCodigo.append("funcion -> " + image + System.lineSeparator());}}
+TOKEN : {<DEF : "def">{f.txtCodigo.append("Function definition -> " + image + System.lineSeparator());}}
 TOKEN : {<END : "end">{f.txtCodigo.append("end -> " + image + System.lineSeparator());}}
 TOKEN : {<RETURN : "return">{f.txtCodigo.append("return -> " + image + System.lineSeparator());}}
 TOKEN : {<EOL : "\n">}
@@ -65,7 +65,7 @@ TOKEN : {<IN : "in">{f.txtCodigo.append("in -> " + image + System.lineSeparator(
 TOKEN : {<WHILE : "while">{f.txtCodigo.append("while -> " + image + System.lineSeparator());}}
 TOKEN : {<FOR : "for">{f.txtCodigo.append("for -> " + image + System.lineSeparator());}}
 //Operadores
-TOKEN : {<CONCATENACION : "&">{f.txtCodigo.append("Concatenacion -> " + image + System.lineSeparator());}}
+TOKEN : {<CONCATENACION : "&">{f.txtCodigo.append("Concat -> " + image + System.lineSeparator());}}
 TOKEN : {<PLUS_EQ : "+=">{f.txtCodigo.append("Plus equal -> " + image + System.lineSeparator());}}
 TOKEN : {<MINUS_EQ : "-=">{f.txtCodigo.append("Minus equal -> " + image + System.lineSeparator());}}
 TOKEN : {<TIMES_EQ : "*=">{f.txtCodigo.append("Times equal -> " + image + System.lineSeparator());}}
@@ -74,8 +74,8 @@ TOKEN : {<AND : "and">{f.txtCodigo.append("and -> " + image + System.lineSeparat
 TOKEN : {<OR : "or">{f.txtCodigo.append("or -> " + image + System.lineSeparator());}}
 TOKEN : {<NOT : "not">{f.txtCodigo.append("not -> " + image + System.lineSeparator());}}
 TOKEN : {<EQ : "==">{f.txtCodigo.append("Equal -> " + image + System.lineSeparator());}}
-TOKEN : {<TRUE : "true">{f.txtCodigo.append("Boolean -> " + image + System.lineSeparator());}}
-TOKEN : {<FALSE : "false">{f.txtCodigo.append("Boolean -> " + image + System.lineSeparator());}}
+TOKEN : {<TRUE : "true">{f.txtCodigo.append("True -> " + image + System.lineSeparator());}}
+TOKEN : {<FALSE : "false">{f.txtCodigo.append("False -> " + image + System.lineSeparator());}}
 TOKEN : {<BIG : ">">{f.txtCodigo.append("Biggest -> " + image + System.lineSeparator());}}
 TOKEN : {<BIGEQ : ">=">{f.txtCodigo.append("Biggest equal -> " + image + System.lineSeparator());}}
 TOKEN : {<LESS : "<">{f.txtCodigo.append("Minus -> " + image + System.lineSeparator());}}
@@ -88,9 +88,9 @@ TOKEN : {<LBRACKET : "[">{f.txtCodigo.append("Left bracket -> " + image + System
 TOKEN : {<COLON : ":">{f.txtCodigo.append("Double colon -> " + image + System.lineSeparator());}}
 TOKEN : {<RBRACKET : "]">{f.txtCodigo.append("Right bracket -> " + image + System.lineSeparator());}}
 TOKEN : {<COMMA : ",">{f.txtCodigo.append("Comma -> " + image + System.lineSeparator());}}
-TOKEN : {<DOUBLECOMMA: "\"">{f.txtCodigo.append("Double comma -> " + image + System.lineSeparator());}}
+TOKEN : {<DOUBLECOMMA: "\"">{f.txtCodigo.append("Quote -> " + image + System.lineSeparator());}}
 //operadores aritmeticos
-TOKEN : {<ASIGNACION : "=">{f.txtCodigo.append("Asignacion -> " + image + System.lineSeparator());}}
+TOKEN : {<ASIGNACION : "=">{f.txtCodigo.append("Asignation -> " + image + System.lineSeparator());}}
 TOKEN : {<PLUS : "+">{f.txtCodigo.append("Plus -> " + image + System.lineSeparator());}}
 TOKEN : {<MINUS : "-">{f.txtCodigo.append("Minus -> " + image + System.lineSeparator());}}
 TOKEN : {<TIMES : "*">{f.txtCodigo.append("Times -> " + image + System.lineSeparator());}}
@@ -107,61 +107,49 @@ TOKEN : {
 void Input() :
 {Token t;}
 {
-        ((
-            <DEF>(t = <IDENTIFIER>{f.txtCodigo.append("Nombre de funcion -> " + t.image + System.lineSeparator());})[<LPAREN>Args()]<COLON>(<EOL>|<EOLW>)
+    try {
+        (LOOKAHEAD(2)(
+            
+            <DEF>(t = <IDENTIFIER>{f.txtCodigo.append("Function name -> " + t.image + System.lineSeparator());})[<LPAREN>Args()]<COLON>(<EOL>|<EOLW>)
             [Code()]
             [Return()]
             <END>[(<EOL>|<EOLW>)+]
-        )+|
-        Code())+
+        )+
+        | Code())+
         <EOF>
-     
+    } catch(ParseException e) {
+        f.txtCodigo.append("Error: se ha encontrado" + e.currentToken + ", se esperaba: " + e.currentToken.next + System.lineSeparator());
+        f.txtCodigo.append(e.kind + System.lineSeparator());
+    }
 }
-void Args() :
-{Token t;}
-{
-    (t = <IDENTIFIER>{f.txtCodigo.append("Parametro -> " + t.image + System.lineSeparator());}|<NUMBER>)
-    [(<COMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Parametro -> " + t.image + System.lineSeparator());}|<NUMBER>))+]<RPAREN>
-}
-void Print() :
-{   
-}
-{
-    <PRINT><LPAREN>Imprimible()[(<CONCATENACION>Imprimible())+]<RPAREN>(<EOL>|<EOLW>)
-}
-void AuxPrint() :
-{}
-{
-    <PLUS>|
-    <MINUS>|
-    <TIMES>|
-    <DIVIDE>|
-    "="|
-    <TRUE>|
-    <FALSE>
-}
-void Imprimible() :
-{Token t;}
-{
-    (t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image + System.lineSeparator());})[<LBRACKET>(<IDENTIFIER>|<NUMBER>)<RBRACKET>]
-    |<TRUE>|<FALSE>|<NUMBER>|
-    <DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());}|AuxPrint()|operacion()|<NUMBER>)*<DOUBLECOMMA>
-}
-
 
 void Code() :
 {}
 {
     (
-    VariableBooleana()|
-    variableArray()|
-    VariableNormal()|
-    VariableOperacion()|
-    VariableTexto()|
-    VariableEntrada()|
-    VariableFuncion()|
-    Sentencias()
+        VariableBooleana()|
+        variableArray()|
+        VariableNormal()|
+        VariableOperacion()|
+        VariableTexto()|
+        VariableEntrada()|
+        VariableFuncion()|
+        Entrada()|
+        SentenciaIf()|
+        SentenciaFor()|
+        SentenciaWhile()|
+        SentenciaSwitch()|
+        Print()|
+        <IDENTIFIER><INCR>(<EOL>|<EOLW>)|
+        <IDENTIFIER><DECR>(<EOL>|<EOLW>)
     )+
+}
+
+void Args() :
+{Token t;}
+{
+    (t = <IDENTIFIER>{f.txtCodigo.append("Param -> " + t.image + System.lineSeparator());}|<NUMBER>)
+    [(<COMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Params -> " + t.image + System.lineSeparator());}|<NUMBER>))+]<RPAREN>
 }
 void VariableBooleana() :
 {Token t;}
@@ -192,7 +180,7 @@ void VariableTexto() :
 void Texto() :
 {Token t;}
 {
-    <DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Cadena de texto -> " + t.image + System.lineSeparator());}|<NUMBER>)*<DOUBLECOMMA>
+    <DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("String -> " + t.image + System.lineSeparator());}|<NUMBER>)*<DOUBLECOMMA>
 }
 void VariableEntrada() :
 {}
@@ -202,11 +190,11 @@ void VariableEntrada() :
 void variableArray() :
 {Token t;}
 {
-   (t = <IDENTIFIER>{f.txtCodigo.append("Arreglo -> " + t.image + System.lineSeparator());})<ASIGNACION>
+   (t = <IDENTIFIER>{f.txtCodigo.append("Array -> " + t.image + System.lineSeparator());})<ASIGNACION>
    <LBRACKET>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>|Texto())[(<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>|Texto()))+]<RBRACKET>(<EOL>|<EOLW>)|
-   (t = <IDENTIFIER>{f.txtCodigo.append("Arreglo -> " + t.image + System.lineSeparator());})<ASIGNACION><LBRACKET><RBRACKET>(<EOL>|<EOLW>)|
+   (t = <IDENTIFIER>{f.txtCodigo.append("Array -> " + t.image + System.lineSeparator());})<ASIGNACION><LBRACKET><RBRACKET>(<EOL>|<EOLW>)|
    //array[0] = 1
-   (t = <IDENTIFIER>{f.txtCodigo.append("Arreglo -> " + t.image + System.lineSeparator());})<LBRACKET>(<NUMBER>|<IDENTIFIER>)<RBRACKET><ASIGNACION>(<NUMBER>|<IDENTIFIER>[operacion()]|<TRUE>|<FALSE>|Texto()|operacion())(<EOL>|<EOLW>)
+   (t = <IDENTIFIER>{f.txtCodigo.append("Array -> " + t.image + System.lineSeparator());})<LBRACKET>(<NUMBER>|<IDENTIFIER>)<RBRACKET><ASIGNACION>(<NUMBER>|<IDENTIFIER>[operacion()]|<TRUE>|<FALSE>|Texto()|operacion())(<EOL>|<EOLW>)
 
 }
 void VariableFuncion() :
@@ -217,21 +205,7 @@ void VariableFuncion() :
 void Entrada() :
 {Token t;}
 {
-    <INPUT><LPAREN>[<DOUBLECOMMA>((t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());})|<NUMBER>)+<DOUBLECOMMA>]<RPAREN>(<EOL>|<EOLW>)
-}
-void Sentencias() :
-{}
-{
-    (
-        Entrada()|
-        SentenciaIf()|
-        SentenciaFor()|
-        SentenciaWhile()|
-        SentenciaSwitch()|
-        Print()|
-        <IDENTIFIER><INCR>(<EOL>|<EOLW>)|
-        <IDENTIFIER><DECR>(<EOL>|<EOLW>)
-    )+
+    <INPUT><LPAREN>[<DOUBLECOMMA>((t = <IDENTIFIER>{f.txtCodigo.append("String -> " + t.image + System.lineSeparator());})|<NUMBER>)+<DOUBLECOMMA>]<RPAREN>(<EOL>|<EOLW>)
 }
 
 void SentenciaWhile() :
@@ -316,7 +290,34 @@ void SentenciaFor() :
 {Token t;}
 {
 	//for i | for numero in [0 1 2 3 4] | in "hola" | in ["mike jorge 29"]
-    <FOR>(t = <IDENTIFIER>{f.txtCodigo.append("Iterador -> " + t.image + System.lineSeparator());})<IN>((<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Texto -> " + t.image + System.lineSeparator());})+<DOUBLECOMMA>)|<LBRACKET>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>|Texto())[(<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>|Texto()))+]<RBRACKET>|<NUMBER>|<IDENTIFIER>)<COLON>(<EOL>|<EOLW>)
+    <FOR>(t = <IDENTIFIER>{f.txtCodigo.append("Iterator -> " + t.image + System.lineSeparator());})<IN>((<DOUBLECOMMA>(t = <IDENTIFIER>{f.txtCodigo.append("String -> " + t.image + System.lineSeparator());})+<DOUBLECOMMA>)|<LBRACKET>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>|Texto())[(<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>|Texto()))+]<RBRACKET>|<NUMBER>|<IDENTIFIER>)<COLON>(<EOL>|<EOLW>)
         Code()
     <END>(<EOL>|<EOLW>)
+}
+
+void Print() :
+{   
+}
+{
+    <PRINT><LPAREN>Imprimible()[(<CONCATENACION>Imprimible())+]<RPAREN>(<EOL>|<EOLW>)
+}
+void AuxPrint() :
+{}
+{
+    <PLUS>|
+    <MINUS>|
+    <TIMES>|
+    <DIVIDE>|
+    "="|
+    <TRUE>|
+    <FALSE>
+}
+void Imprimible() :
+{Token t;}
+{
+    (t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image + System.lineSeparator());})
+    [<LBRACKET>(t=<IDENTIFIER>{f.txtCodigo.append("Index -> " + t.image + System.lineSeparator());}
+    |t=<NUMBER>{f.txtCodigo.append("Index -> " + t.image + System.lineSeparator());})<RBRACKET>]
+    |<TRUE>|<FALSE>|<NUMBER>|
+    <DOUBLECOMMA>((t = <IDENTIFIER>{f.txtCodigo.append("String -> " + t.image + System.lineSeparator());})+|AuxPrint()|operacion()|<NUMBER>)*<DOUBLECOMMA>
 }
