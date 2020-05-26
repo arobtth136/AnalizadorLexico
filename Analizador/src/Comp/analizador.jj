@@ -137,7 +137,19 @@ void Input() :
         | Code())+
         <EOF>
     }catch(ParseException e){
-        
+        if(e.currentToken.next.image.equals("\r\n") && !":".equals(e.currentToken.image)){
+            f.txtCodigo.append("You forgot \":\"");
+        } else if(e.currentToken.next.image.equals("end") || e.currentToken.next.image.equals("\r\n") || e.currentToken.next.image.equals("\n") || e.currentToken.next.image.equals(" ")){
+            f.txtCodigo.append("Function body can not be empty, delete it or put a Asignation, Print, for, while or switch statement" + System.lineSeparator());
+        }else if(e.currentToken.next.image.equals("(")){
+            f.txtCodigo.append("Params body is incomplete, expected (param1,param2,...)" + System.lineSeparator());
+        }else if(e.currentToken.next.image.equals(")")){
+            f.txtCodigo.append("Encountered: \")\", expected \":\"" + System.lineSeparator());
+        }else if(e.currentToken.next.image.equals(",")){
+            f.txtCodigo.append("Params body is incomplete, missing param? or replace it by a )" + System.lineSeparator());
+        }
+        f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn);
+        //System.out.println("Error: " + e.currentToken.next.image + ", kind: " + e.currentToken.next.kind);
     }
 }
 
@@ -147,9 +159,10 @@ void Args() :
     try{
         (t = <IDENTIFIER>{f.txtCodigo.append("Param -> " + t.image + System.lineSeparator());}|<NUMBER>)
         [(<COMMA>(t = <IDENTIFIER>{f.txtCodigo.append("Params -> " + t.image + System.lineSeparator());}|<NUMBER>))+]<RPAREN>
-    } catch(ParseException e){
-
+    }catch(ParseException e){
+        
     }
+    
 }
 void Variables() :
 {Token t;}
@@ -166,11 +179,6 @@ void Variables() :
         <IDENTIFIER>|
         <TEXT>
     )(<EOL>|<EOLW>) 
-}
-void Texto() :
-{Token t;}
-{
-    <Quote>(t = <IDENTIFIER>{f.txtCodigo.append("String -> " + t.image + System.lineSeparator());}|<NUMBER>)*<Quote>
 }
 void variableArray() :
 {Token t;}
@@ -248,16 +256,20 @@ void SentenciaSwitch() :
 void Return() :
 {}
 {   
-    //return variable
-    <RETURN>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)(<EOL>|<EOLW>)|
-    //return "texto"
-    <RETURN><Quote>(<IDENTIFIER>|<NUMBER>)*<Quote>(<EOL>|<EOLW>)|
-    //return 3 + 1 / 5
-    <RETURN>(<NUMBER>|<IDENTIFIER>)((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>))+(<EOL>|<EOLW>)|
-    //return (3+1) * var || var*(3+1)/4+(3+1)
-    <RETURN>operacion()(<EOL>|<EOLW>)|
-    //return isOdd(number)
-    <RETURN><IDENTIFIER><LPAREN>Args()(<EOL>|<EOLW>)
+    try{
+        //return variable
+        <RETURN>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>)(<EOL>|<EOLW>)|
+        //return "texto"
+        <RETURN><Quote>(<IDENTIFIER>|<NUMBER>)*<Quote>(<EOL>|<EOLW>)|
+        //return 3 + 1 / 5
+        <RETURN>(<NUMBER>|<IDENTIFIER>)((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>))+(<EOL>|<EOLW>)|
+        //return (3+1) * var || var*(3+1)/4+(3+1)
+        <RETURN>operacion()(<EOL>|<EOLW>)|
+        //return isOdd(number)
+        <RETURN><IDENTIFIER><LPAREN>Args()(<EOL>|<EOLW>)
+    }catch(ParseException e){
+        System.out.println("Error: " + e.currentToken.next.image + ", kind: " + e.currentToken.next.kind);
+    }
 }
 void operacion() :
 {}
