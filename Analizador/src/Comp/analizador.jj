@@ -137,7 +137,7 @@ void Input() :
         | Code())+
         <EOF>
     }catch(ParseException e){
-
+        
     }
 }
 
@@ -179,7 +179,7 @@ void variableArray() :
         t = <IDENTIFIER>{f.txtCodigo.append("Array -> " + t.image + System.lineSeparator());}[<LBRACKET>(<NUMBER>|<IDENTIFIER>)<RBRACKET>]<ASIGNACION>
         <LBRACKET>[(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>|(<TEXT>))[(<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>|<TEXT>))+]]<RBRACKET>(<EOL>|<EOLW>)
     }catch(ParseException e){
-        
+
     }
    
 }
@@ -293,12 +293,12 @@ void Imprimible() :
     }catch(ParseException e){
         System.out.println(e.currentToken.next.image);
         if(e.currentToken.next.image.equals("\"")){
-            f.txtCodigo.append("Encountered: " + e.currentToken.next.image + ", expecting: String");
+            f.txtCodigo.append("Encountered: " + e.currentToken.next.image + ", expecting: String or \"" + System.lineSeparator());
         } else if(e.currentToken.next.image.equals(")")){
-            f.txtCodigo.append("Encountered: " + e.currentToken.next.image + ", expecting: Text, Number, Boolean value, Array value");
+            f.txtCodigo.append("Encountered: " + e.currentToken.next.image + ", expecting: Text, Number, Boolean value, Array value" + System.lineSeparator());
         }else if(e.currentToken.next.image.equals("[")){
-            f.txtCodigo.append("Encountered: " + e.currentToken.next.image + ", expecting: Text, Number, Boolean value");
+            f.txtCodigo.append("Encountered: " + e.currentToken.next.image + ", expecting: Array identifier or replace it with Text, Number, Boolean, Identifier" + System.lineSeparator());
         }
-        System.out.println("Error print");
+        f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn);
     }
 }
