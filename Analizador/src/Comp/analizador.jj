@@ -313,13 +313,22 @@ void SentenciaFor() :
 }
 
 void Print() :
-{   
-}
+{level = 4;System.out.println("Print");}
 {
-    <PRINT><LPAREN>Imprimible()[(<CONCATENACION>Imprimible())+]<RPAREN>(<EOL>|<EOLW>)
+    try{
+        <PRINT><LPAREN>Imprimible()[(<CONCATENACION>Imprimible())+]<RPAREN>(<EOL>|<EOLW>)
+    }catch(ParseException e){
+        if(e.currentToken.next.image.equals("print") && level == 1){
+            f.txtCodigo.append("Encountered: " + e.currentToken.next.image + ", expecting: Text, Number, Boolean, Array value, Identifier" + System.lineSeparator());
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn);
+        }else if(e.currentToken.next.image.equals("&") && level == 2){
+            f.txtCodigo.append("Encountered: " + e.currentToken.next.image + ", expecting: Text, Number, Boolean value, Array value or delete it" + System.lineSeparator());
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn);
+        }
+    }
 }
 void Imprimible() :
-{Token t;}
+{Token t;level=2;System.out.println("Imprimible");}
 {
     try{
         t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image + System.lineSeparator());}
@@ -328,13 +337,18 @@ void Imprimible() :
         |<TRUE>|<FALSE>|<NUMBER>|<TEXT>
     }catch(ParseException e){
         System.out.println(e.currentToken.next.image);
-        if(e.currentToken.next.image.equals("\"")){
+        if(e.currentToken.next.image.equals("\"") && level == 2){
             f.txtCodigo.append("Encountered: " + e.currentToken.next.image + ", expecting: String or \"" + System.lineSeparator());
-        } else if(e.currentToken.next.image.equals(")")){
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn);
+        } else if(e.currentToken.next.image.equals(")") && level == 2){
             f.txtCodigo.append("Encountered: " + e.currentToken.next.image + ", expecting: Text, Number, Boolean value, Array value" + System.lineSeparator());
-        }else if(e.currentToken.next.image.equals("[")){
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn);
+        } else if(e.currentToken.next.image.equals("(") && level == 2){
+            f.txtCodigo.append("Encountered: " + e.currentToken.next.image + ", expecting: Text, Number, Boolean value, Array value" + System.lineSeparator());
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn);
+        }else if(e.currentToken.next.image.equals("[") && level == 2){
             f.txtCodigo.append("Encountered: " + e.currentToken.next.image + ", expecting: Array identifier or replace it with Text, Number, Boolean, Identifier" + System.lineSeparator());
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn);
         }
-        f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn);
     }
 }
