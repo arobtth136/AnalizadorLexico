@@ -14,7 +14,7 @@ import static Comp.analizador.f;
 
 public class analizador {
     static FrmAnalisis f;
-
+    static int level = 3;
     public analizador(FrmAnalisis f){
         this.f = f;
     }
@@ -124,7 +124,7 @@ void Code() :
     )+
 }
 void Input() :
-{Token t;}
+{Token t;level = 1;}
 {
     try{
         (LOOKAHEAD(2)
@@ -137,19 +137,24 @@ void Input() :
         | Code())+
         <EOF>
     }catch(ParseException e){
-        if(e.currentToken.next.image.equals("\r\n") && !":".equals(e.currentToken.image)){
+        System.out.println(level);
+        if((e.currentToken.next.image.equals("\r\n") && !":".equals(e.currentToken.image) && level==1)){
             f.txtCodigo.append("You forgot \":\"");
-        } else if(e.currentToken.next.image.equals("end") || e.currentToken.next.image.equals("\r\n") || e.currentToken.next.image.equals("\n") || e.currentToken.next.image.equals(" ")){
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
+        } else if((e.currentToken.next.image.equals("end") || e.currentToken.next.image.equals("\r\n") || e.currentToken.next.image.equals("\n") || e.currentToken.next.image.equals(" ")) && level == 1){
             f.txtCodigo.append("Function body can not be empty, delete it or put a Asignation, Print, for, while or switch statement" + System.lineSeparator());
-        }else if(e.currentToken.next.image.equals("(")){
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
+        }else if((e.currentToken.next.image.equals("(")) && level == 1){
             f.txtCodigo.append("Params body is incomplete, expected (param1,param2,...)" + System.lineSeparator());
-        }else if(e.currentToken.next.image.equals(")")){
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
+        }else if(e.currentToken.next.image.equals(")") && level == 1){
             f.txtCodigo.append("Encountered: \")\", expected \":\"" + System.lineSeparator());
-        }else if(e.currentToken.next.image.equals(",")){
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
+        }else if(e.currentToken.next.image.equals(",") && level == 1){
             f.txtCodigo.append("Params body is incomplete, missing param? or replace it by a )" + System.lineSeparator());
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
         }
-        f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn);
-        //System.out.println("Error: " + e.currentToken.next.image + ", kind: " + e.currentToken.next.kind);
+        System.out.println("Error: " + e.currentToken.next.image + ", kind: " + e.currentToken.next.kind);
     }
 }
 
@@ -268,16 +273,35 @@ void Return() :
         //return isOdd(number)
         <RETURN><IDENTIFIER><LPAREN>Args()(<EOL>|<EOLW>)
     }catch(ParseException e){
+        System.out.println("Error return");
         System.out.println("Error: " + e.currentToken.next.image + ", kind: " + e.currentToken.next.kind);
     }
 }
 void operacion() :
-{}
+{System.out.println("Operacion");level = 3;}
 {
-    <LPAREN>(<NUMBER>|<IDENTIFIER>|operacion())(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())<RPAREN>[(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion()]|
-    (<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())[((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion())+]|
-    <LPAREN>(<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())[((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion())+]<RPAREN>|
-    (<NUMBER>|<IDENTIFIER>)
+    try{
+        <LPAREN>(<NUMBER>|<IDENTIFIER>|operacion())(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())<RPAREN>[(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion()]|
+        (<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())[((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion())+]|
+        <LPAREN>(<NUMBER>|<IDENTIFIER>)(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)(<NUMBER>|<IDENTIFIER>|operacion())[((<PLUS>|<MINUS>|<TIMES>|<DIVIDE>)operacion())+]<RPAREN>|
+        (<NUMBER>|<IDENTIFIER>)
+    }catch(ParseException e){
+        System.out.println(level);
+        if(e.currentToken.next.image.equals("\r\n") && level == 3){
+            f.txtCodigo.append("Error, encountered: <EOL>, finish this operation with <NUMBER>, <IDENTIFIER>, \"(\", \")\"" + System.lineSeparator());
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
+        }else if(e.currentToken.next.image.equals("(") && level == 3){
+            f.txtCodigo.append("Error, encountered: (, expected *, +, -, /, <NUMBER>, <IDENTIFIER>" + System.lineSeparator());
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
+        }else if(e.currentToken.next.image.equals(")") && level == 3){
+            f.txtCodigo.append("Error, encountered: ), finis this operation with *, +, -, / and <NUMBER>, <IDENTIFIER>" + System.lineSeparator());
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
+        } else {
+            f.txtCodigo.append("Error, encountered: " + e.currentToken.image + ", expected <NUMBER>, <IDENTIFIER>, \"(\", \")\"" + System.lineSeparator());
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
+        }
+        System.out.println("Error: " + e.currentToken.next.image + ", kind: " + e.currentToken.next.kind);
+    }
 }
 void SentenciaFor() :
 {Token t;}
