@@ -101,7 +101,7 @@ TOKEN : {<DECR : "--">{f.txtCodigo.append("Decrement -> " + image + System.lineS
 //Caracteres
 TOKEN : {
     <#CHAR : (["a"-"z","A"-"Z","0"-"9"])+>|
-    <#STRINGLITERAL : (["a"-"z","A"-"Z","0"-"9","_",":","#","?",",", "+", "-", "*", "/","(",")","[","]"])+>|
+    <#STRINGLITERAL : (["a"-"z","A"-"Z","0"-"9","_",":","#","?","=",",", "+", "-", "*", "/","(",")","[","]", " "])+>|
     <NUMBER : (["0"-"9"])+|(["0"-"9"])+"."(["0"-"9"])+>{f.txtCodigo.append("Number -> " + image + System.lineSeparator());}|
     <IDENTIFIER : <CHAR>>|
     <TEXT : (<Quote><STRINGLITERAL><Quote>)>{f.txtCodigo.append("String -> " + image + System.lineSeparator());}
@@ -138,20 +138,27 @@ void Input() :
         <EOF>
     }catch(ParseException e){
         System.out.println(level);
+        System.out.println(e.currentToken.kind);
         if((e.currentToken.next.image.equals("\r\n") && !":".equals(e.currentToken.image) && level==1)){
             f.txtCodigo.append("You forgot \":\"");
             f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
         } else if((e.currentToken.next.image.equals("end") || e.currentToken.next.image.equals("\r\n") || e.currentToken.next.image.equals("\n") || e.currentToken.next.image.equals(" ")) && level == 1){
-            f.txtCodigo.append("Function body can not be empty, delete it or put a Asignation, Print, for, while or switch statement" + System.lineSeparator());
+            f.txtCodigo.append("Function body can not be empty, delete it or put a Asignation, Print, for, while or switch" + System.lineSeparator());
             f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
         }else if((e.currentToken.next.image.equals("(")) && level == 1){
-            f.txtCodigo.append("Params body is incomplete, expected (param1,param2,...)" + System.lineSeparator());
+            f.txtCodigo.append("Encountered \"(\", expecting params or switch, asignation sentence" + System.lineSeparator());
             f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
         }else if(e.currentToken.next.image.equals(")") && level == 1){
             f.txtCodigo.append("Encountered: \")\", expected \":\"" + System.lineSeparator());
             f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
         }else if(e.currentToken.next.image.equals(",") && level == 1){
             f.txtCodigo.append("Params body is incomplete, missing param? or replace it by a )" + System.lineSeparator());
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
+        }else if((e.currentToken.next.image.equals("=") || e.currentToken.next.image.equals("==")) && level == 1){
+            f.txtCodigo.append("Missing statement" + System.lineSeparator());
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
+        }else if((e.currentToken.next.image.equals("if") || e.currentToken.next.image.equals("elif")) && level == 1){
+            f.txtCodigo.append("Missing comparation, expected <NUMBER>, <IDENTIFIER>, \"text\"" + System.lineSeparator());
             f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
         }
         System.out.println("Error: " + e.currentToken.next.image + ", kind: " + e.currentToken.next.kind);
@@ -241,13 +248,20 @@ void Else() :
 }
 
 void Elif() :
-{}
+{level = 36;}
 {
+    try{
     (
-    <ELIF>Comparacion()(<EOL>|<EOLW>)
-        [Code()]
+        <ELIF>Comparacion()(<EOL>|<EOLW>)
+            [Code()]
     )+
     [Else()]
+    }catch(ParseException e){
+        if(level == 36){
+            f.txtCodigo.append("Missing comparation <IDENTIFIER>, <NUMBER>, \"Text\"" + System.lineSeparator());
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
+        }
+    }
 }
 //Sintaxis de la sentencia del metodo Switch
 void SentenciaSwitch() :
