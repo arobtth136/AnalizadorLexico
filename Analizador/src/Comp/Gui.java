@@ -160,6 +160,7 @@ public class Gui extends javax.swing.JFrame {
                 br = new BufferedReader(new FileReader(f));
             } catch (FileNotFoundException ex) {
             }
+            
             try {
                 l = br.readLine();
                 txtCodigo.setText(null);
