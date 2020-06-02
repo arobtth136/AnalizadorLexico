@@ -1,8 +1,0 @@
-numero = 3
-print("Hola je")
-print("saludos")
-def  variables :
-    operacion = isEven(23, 12, caca)
-end
-numero = 4
-numero = 5
