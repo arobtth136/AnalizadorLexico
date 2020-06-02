@@ -221,24 +221,35 @@ void SentenciaWhile() :
 void SentenciaIf() :
 {}
 {
-    <IF>Comparacion()(<EOL>|<EOLW>)
+    <IF>Comparacion()(<EOL>|<EOLW>)+
         [Code()]
     [Else()|Elif()]
     <END>(<EOL>|<EOLW>)
 }
 void Comparacion() : 
-{}
+{System.out.println("Comparacion");level = 20;}
 {
-    //if true
-    (<TRUE>|<FALSE>|<IDENTIFIER>)<COLON>|
-    //if a < b || if a < 3 || 3 > a
-    (<NUMBER>|<IDENTIFIER>|<TEXT>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<EQ>)(<IDENTIFIER>|<NUMBER>|<TEXT>)<COLON>|
-    //if true == true || if not true
-    (<TRUE>|<FALSE>|<IDENTIFIER>)(<EQ>|<NOT>)(<TRUE>|<FALSE>|<IDENTIFIER>)<COLON>|
-    //not true || not false
-    <NOT>(<TRUE>|<FALSE>)<COLON>|
-    //if a not b or a < b
-    ((<NUMBER>|<TRUE>|<FALSE>|<IDENTIFIER>|<TEXT>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>|<EQ>)(<NUMBER>|<TRUE>|<FALSE>|<IDENTIFIER>|<TEXT>)[(<OR>|<AND>)])+<COLON>
+    try{
+        //if true
+        (<TRUE>|<FALSE>|<IDENTIFIER>)<COLON>|
+        //if a < b || if a < 3 || 3 > a
+        (<NUMBER>|<IDENTIFIER>|<TEXT>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<EQ>)(<IDENTIFIER>|<NUMBER>|<TEXT>)<COLON>|
+        //if true == true || if not true
+        (<TRUE>|<FALSE>|<IDENTIFIER>)(<EQ>|<NOT>)(<TRUE>|<FALSE>|<IDENTIFIER>)<COLON>|
+        //not true || not false
+        <NOT>(<TRUE>|<FALSE>)<COLON>|
+        //if a not b or a < b
+        ((<NUMBER>|<TRUE>|<FALSE>|<IDENTIFIER>|<TEXT>)(<LESS>|<LESSEQ>|<BIG>|<BIGEQ>|<NOT>|<EQ>)(<NUMBER>|<TRUE>|<FALSE>|<IDENTIFIER>|<TEXT>)[(<OR>|<AND>)])+<COLON>
+    }catch(ParseException e){
+        System.out.println("Error: " + e.currentToken.image);
+        if(((e.currentToken.kind >= 31 && e.currentToken.kind <= 35) || e.currentToken.kind == 28) && level == 20){
+            f.txtCodigo.append("Error, encountered: \"" + e.currentToken.image + "\", expecting: <NUMBER>, <IDENTIFIER>" + System.lineSeparator());
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
+        }else {
+            f.txtCodigo.append("Error, encountered: \"" + e.currentToken.image + "\", expecting: \":\"" + System.lineSeparator());
+            f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
+        }
+    }
 }
 void Else() :
 {}
