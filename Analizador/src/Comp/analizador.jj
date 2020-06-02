@@ -1,5 +1,5 @@
 options {
-	LOOKAHEAD = 2;
+	LOOKAHEAD = 4;
     STATIC = false;
 }
 PARSER_BEGIN(analizador)
@@ -101,7 +101,7 @@ TOKEN : {<DECR : "--">{f.txtCodigo.append("Decrement -> " + image + System.lineS
 //Caracteres
 TOKEN : {
     <#CHAR : (["a"-"z","A"-"Z","0"-"9"])+>|
-    <#STRINGLITERAL : (["a"-"z","A"-"Z","0"-"9","_",":","#","?","=",",", "+", "-", "*", "/","(",")","[","]", " "])+>|
+    <#STRINGLITERAL : (["a"-"z","A"-"Z","0"-"9","_",":","#","?","!","=",",", "+", "-", "*", "/","(",")","[","]", " "])+>|
     <NUMBER : (["0"-"9"])+|(["0"-"9"])+"."(["0"-"9"])+>{f.txtCodigo.append("Number -> " + image + System.lineSeparator());}|
     <IDENTIFIER : <CHAR>>|
     <TEXT : (<Quote><STRINGLITERAL><Quote>)>{f.txtCodigo.append("String -> " + image + System.lineSeparator());}
@@ -111,7 +111,7 @@ void Code() :
 {}
 {
     (
-        LOOKAHEAD(1)Variables()|
+        LOOKAHEAD(4)Variables()|
         variableArray()|
         Entrada()|
         SentenciaIf()|
@@ -138,7 +138,6 @@ void Input() :
         <EOF>
     }catch(ParseException e){
         System.out.println(level);
-        System.out.println(e.currentToken.kind);
         if((e.currentToken.next.image.equals("\r\n") && !":".equals(e.currentToken.image) && level==1)){
             f.txtCodigo.append("You forgot \":\"");
             f.txtCodigo.append("In line " + e.currentToken.beginLine + ", column " + e.currentToken.beginColumn + System.lineSeparator());
@@ -177,7 +176,7 @@ void Args() :
     
 }
 void Variables() :
-{Token t;}
+{Token t;System.out.println("Variables");}
 {
     t = <IDENTIFIER>{f.txtCodigo.append("Variable -> " + t.image + System.lineSeparator());}
     (<ASIGNACION>|<PLUS_EQ>|<MINUS_EQ>|<TIMES_EQ>|<DIVIDE_EQ>)
@@ -193,11 +192,14 @@ void Variables() :
     )(<EOL>|<EOLW>) 
 }
 void variableArray() :
-{Token t;}
+{Token t;System.out.println("Arreglo");}
 {
     try{
-        t = <IDENTIFIER>{f.txtCodigo.append("Array -> " + t.image + System.lineSeparator());}[<LBRACKET>(<NUMBER>|<IDENTIFIER>)<RBRACKET>]<ASIGNACION>
-        <LBRACKET>[(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>|(<TEXT>))[(<COMMA>(<NUMBER>|<IDENTIFIER>|<TRUE>|<FALSE>|<TEXT>))+]]<RBRACKET>(<EOL>|<EOLW>)
+        t = <IDENTIFIER>{f.txtCodigo.append("Array -> " + t.image + System.lineSeparator());}<ASIGNACION><LBRACKET>
+        [(<IDENTIFIER>|<NUMBER>|<TEXT>|<TRUE>|<FALSE>)[(<COMMA>(<IDENTIFIER>|<NUMBER>|<TEXT>|<TRUE>|<FALSE>))+]]<RBRACKET>(<EOL>|<EOLW>)|
+        t = <IDENTIFIER>{f.txtCodigo.append("Array -> " + t.image + System.lineSeparator());}<LBRACKET>(<NUMBER>|<IDENTIFIER>)<RBRACKET><ASIGNACION>(<IDENTIFIER>|<NUMBER>|<TEXT>|<TRUE>|<FALSE>)(<EOL>|<EOLW>)
+        /*t = <IDENTIFIER>{f.txtCodigo.append("Array -> " + t.image + System.lineSeparator());}<ASIGNACION><LBRACKET>(<IDENTIFIER>|<NUMBER>|<TEXT>|<TRUE>|<FALSE>)
+        (<COMMA>(<IDENTIFIER>|<NUMBER>|<TEXT>|<TRUE>|<FALSE>))+<RBRACKET>(<EOL>|<EOLW>)*/
     }catch(ParseException e){
 
     }
