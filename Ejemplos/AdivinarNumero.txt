@@ -1,0 +1,17 @@
+def AdiviaElNumero :
+	numero = 639
+	intentos = 1
+	while true :
+		resp = input("numero?")
+		if numero == resp :
+			print("Adivinaste el numero con " & intentos & "intentos")
+		else :
+			if numero > resp :
+				print("Pequeño")
+			else :
+				print("Grande")
+			end
+		end
+		intentos ++
+	end
+end

@@ -182,7 +182,7 @@ public class FrmAnalisis extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JLabel lbAnalisis;
+    public static javax.swing.JLabel lbAnalisis;
     public static java.awt.TextArea txtCodigo;
     // End of variables declaration//GEN-END:variables
 }

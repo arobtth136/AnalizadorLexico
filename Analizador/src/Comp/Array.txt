@@ -1,7 +1,0 @@
-def prueba:
- array = [a,b,c,d,e]
- array = [1,2,3,4,2]
- array = [1,a,2,c,3,true] 
- array[0] = 1
- array[i]
-end

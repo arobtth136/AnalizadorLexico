@@ -1,22 +1,21 @@
 package Comp;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Gui extends javax.swing.JFrame {
@@ -56,7 +55,6 @@ public class Gui extends javax.swing.JFrame {
         getContentPane().setLayout(new java.awt.BorderLayout());
 
         panel1.setBackground(new java.awt.Color(35, 98, 236));
-        panel1.setPreferredSize(new java.awt.Dimension(307, 782));
 
         btnAnalizar.setBackground(new java.awt.Color(255, 255, 255));
         btnAnalizar.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -146,7 +144,6 @@ public class Gui extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        txtCodigo.setEditable(false);
         txtCodigo.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
         jPanel1.add(txtCodigo, java.awt.BorderLayout.CENTER);
 
@@ -163,6 +160,7 @@ public class Gui extends javax.swing.JFrame {
                 br = new BufferedReader(new FileReader(f));
             } catch (FileNotFoundException ex) {
             }
+            
             try {
                 l = br.readLine();
                 txtCodigo.setText(null);
@@ -187,10 +185,23 @@ public class Gui extends javax.swing.JFrame {
 
     private void btnAnalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalizarActionPerformed
         FrmAnalisis f = new FrmAnalisis();
-        if (args[0] != null) {
+        if (!txtCodigo.getText().equals("")) {
             try {
-                analizador a = new analizador(f);
-                a.main(args);
+                ByteArrayInputStream texto = new ByteArrayInputStream(txtCodigo.getText().getBytes());
+                analizador a = new analizador(texto);
+                try{
+                    a.Input();
+                    FrmAnalisis.lbAnalisis.setText("Análisis completado");
+                    FrmAnalisis.lbAnalisis.setForeground(Color.green);
+                } catch (ParseException e){
+                    FrmAnalisis.lbAnalisis.setText("Error sintáctico");
+                    FrmAnalisis.lbAnalisis.setForeground(Color.red);
+                    FrmAnalisis.txtCodigo.setText(e.getMessage());
+                } catch (TokenMgrError e){
+                    FrmAnalisis.lbAnalisis.setText("Error Léxico");
+                    FrmAnalisis.lbAnalisis.setForeground(Color.yellow);
+                    FrmAnalisis.txtCodigo.setText(e.getMessage());
+                }
                 f.setVisible(true);
             } catch (Exception ex) {
                 Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);

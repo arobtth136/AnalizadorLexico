@@ -1,0 +1,47 @@
+def calculadora :
+	valora = 0
+	valorb = 0
+	valoraux = 0
+	valorfinal = 0
+	opc1 = 0
+	opc2 = 0
+	count = 1
+	print ("ingrese el valor"&count)
+	valora = input()
+	count ++
+	print ("ingrese el valor"&count)
+	valorb = input()
+	count ++
+	print ("Que operacion desea realizar? 1-Suma 2-Resta 3-Multiplicacion 4-Division")
+	Opc1 = input()
+	if opc1 == 1 :
+		valorfinal = valora + valorb
+	elif opc1 == 2 :
+		valorfinal = valora - valorb
+	elif opc1 == 3 :
+		valorfinal = valora * valorb
+	else :
+		valorfinal = valora / valorb
+	end
+	print ("Desea agregar otra operacion al resultado? 1-Si 2-No")
+	opc2 = input()
+	if opc2 == 1 :
+		while opc2 == 1 :
+			print("Ingrese el valor"&count)
+			valoraux = input()
+			count ++
+			print ("Que operacion desea realizar? 1-Suma 2-Resta 3-Multiplicacion 4-Division")
+			Opc1 = input()
+			if opc1 == 1 :
+				valorfinal = valorfinal + valoraux
+			elif opc1 == 2 :
+				valorfinal = valorfinal - valoraux
+			elif opc1 == 3 :
+				valorfinal = valorfinal * valoraux
+			else :
+				valorfinal = valorfinal / valoraux
+			end
+		end
+	end
+	print ("El resultado final es: "&valorfinal)
+end

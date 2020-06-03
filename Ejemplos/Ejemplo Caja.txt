@@ -1,0 +1,32 @@
+def ejemplo :
+	count = 0
+	option = 0
+	select = 0
+	print ("Desea comprar algo? 1-Si 2-No")
+	option = input()
+	if option == 1 :
+		while option == 1 :
+			print ("Decide tu articulo: 1-Chetos 2-CocaCola 3-Emperador")
+			select = input()
+			switch (select) :
+				case 1 :
+				count ++
+				break
+				case 2 :
+				count ++
+				break
+				case 3 :
+				count ++
+				break
+				default :
+				print ("Articulo no valido")
+				break
+			end
+		print ("Desea seguir comprando? 1-Si 2-No")
+		option = input()
+		end
+		print ("Total de articulos comprados: "&count)
+	else :
+		print ("Vuelva pronto")
+	end
+end
